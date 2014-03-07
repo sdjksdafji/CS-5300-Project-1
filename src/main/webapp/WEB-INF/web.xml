@@ -24,7 +24,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
-		<url-pattern>/views/*</url-pattern>
+		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 	<context-param>
 		<description>State saving method: 'client' or 'server' (=default). See
@@ -42,7 +42,7 @@
 	</context-param>
 	
 	<welcome-file-list>
-		<welcome-file>/views/SessionDemo.xhtml</welcome-file>
+		<welcome-file>views/SessionDemo.xhtml</welcome-file>
 	</welcome-file-list>
 		
 
