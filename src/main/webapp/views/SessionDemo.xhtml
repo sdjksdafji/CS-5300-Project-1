@@ -17,26 +17,27 @@
 		<p:panelGrid columns="2">
 			<f:facet name="header">Session Demo</f:facet>
 
-			<h:outputLabel for="label" value="Session Message: " />
-			<h:outputLabel for="sessionMsg"
-				value="#{sessionDemoBean.sessionMessage}" />
 
-			<h:outputLabel for="input" value="User Input: " />
-			<p:inputText id="userInput" value="#{sessionDemoBean.userInput}"
-				required="false" label="userInput" />
+
+			<h:outputLabel value="Session Message: " />
+			<h:outputLabel value="#{sessionDemoBean.sessionMessage}" />
+
+			<h:outputLabel value="User Input: " />
+			<p:inputText value="#{sessionDemoBean.userInput}" required="false"
+				label="userInput" />
 
 			<f:facet name="footer">
-				<p:commandButton type="button" value="Replace" ajax="false"
-					icon="ui-icon-circle-check"
-					actionListener="#{sessionDemoBean.replace}" style="margin:0" />
-				<p:commandButton type="button" value="Refresh" ajax="false"
-					icon="ui-icon-refresh" actionListener="#{sessionDemoBean.refresh}"
-					style="margin:10" />
-				<p:commandButton type="button" value="Logout" ajax="false"
-					icon="ui-icon-close" actionListener="#{sessionDemoBean.logout}"
-					style="margin:10" />
+				<p:commandButton value="Replace" ajax="false"
+					icon="ui-icon-circle-check" action="#{sessionDemoBean.replace}"
+					style="margin:0" />
+				<p:commandButton value="Refresh" ajax="false" icon="ui-icon-refresh"
+					action="#{sessionDemoBean.refresh}" style="margin:10" />
+				<p:commandButton value="Logout" ajax="false" icon="ui-icon-close"
+					action="#{sessionDemoBean.logout}" style="margin:10" />
 			</f:facet>
 		</p:panelGrid>
+
+
 
 	</h:form>
 </h:body>

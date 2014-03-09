@@ -65,7 +65,11 @@ public class SessionDemoBean {
 	}
 
 	public String refresh() {
-		return "/views/SessionDemo.xhtml";
+		// ----------------------------------------------
+		System.out.println("refresh clicked<<--------------------------------------------");
+		// ----------------------------------------------
+
+		return "/views/SessionDemo2.xhtml";
 	}
 
 	public String logout() {
