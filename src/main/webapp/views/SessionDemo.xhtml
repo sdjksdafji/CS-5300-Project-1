@@ -11,29 +11,33 @@
 </h:head>
 
 <h:body>
-				
 
 
-	<p:panelGrid columns="2">
-		<f:facet name="header">Session Demo</f:facet>
+	<h:form id="sessionForm">
+		<p:panelGrid columns="2">
+			<f:facet name="header">Session Demo</f:facet>
 
-		<h:outputLabel for="label" value="Session Message: " />
-		<h:outputLabel for="sessionMsg" value="#{sessionDemoBean.sessionMessage}" />
+			<h:outputLabel for="label" value="Session Message: " />
+			<h:outputLabel for="sessionMsg"
+				value="#{sessionDemoBean.sessionMessage}" />
 
-		<h:outputLabel for="input" value="User Input: " />
-		<p:inputText id="surname" value="#{sessionDemoBean.userInput}"
-			required="true" label="Surname" />
+			<h:outputLabel for="input" value="User Input: " />
+			<p:inputText id="userInput" value="#{sessionDemoBean.userInput}"
+				required="false" label="userInput" />
 
-		<f:facet name="footer">
-			<p:commandButton type="button" value="Replace" icon="ui-icon-check"
-				action="#{sessionDemoBean.replace}" style="margin:0" />
-			<p:commandButton type="button" value="Refresh" icon="ui-icon-check"
-				action="#{sessionDemoBean.refresh}" style="margin:10" />
-			<p:commandButton type="button" value="Logout" icon="ui-icon-check"
-				action="#{sessionDemoBean.logout}" style="margin:10" />
-		</f:facet>
-	</p:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton type="button" value="Replace" ajax="false"
+					icon="ui-icon-circle-check"
+					actionListener="#{sessionDemoBean.replace}" style="margin:0" />
+				<p:commandButton type="button" value="Refresh" ajax="false"
+					icon="ui-icon-refresh" actionListener="#{sessionDemoBean.refresh}"
+					style="margin:10" />
+				<p:commandButton type="button" value="Logout" ajax="false"
+					icon="ui-icon-close" actionListener="#{sessionDemoBean.logout}"
+					style="margin:10" />
+			</f:facet>
+		</p:panelGrid>
 
-
+	</h:form>
 </h:body>
 </html>
