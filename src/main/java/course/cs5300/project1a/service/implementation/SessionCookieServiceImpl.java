@@ -23,15 +23,6 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private SessionStateTableManager sessionStateTableManager;
 
 	@Override
-	public SessionContent getSession(HttpServletRequest request) {
-		long sessionId = this.getSessionId(request);
-		if (sessionId >= 0) {
-			return this.sessionStateTableManager.getSession(sessionId);
-		}
-		return null;
-	}
-
-	@Override
 	public void createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
@@ -58,11 +49,9 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	}
 
 	@Override
-	public void updateSession(HttpServletRequest request,
-			HttpServletResponse response, Timestamp currentTimestamp,
-			long version) {
+	public void updateSession(long sessionId, HttpServletResponse response,
+			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
-		long sessionId = this.getSessionId(request);
 		SessionContent sessionContent = this.sessionStateTableManager
 				.getSession(sessionId);
 		if (sessionContent != null) {
@@ -72,28 +61,36 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			sessionContent.setVersion(version);
 			this.sessionStateTableManager.updateSession(sessionId,
 					sessionContent);
+			this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
 		}
 	}
 
-	private long getSessionId(HttpServletRequest request) {
+	@Override
+	public long getSessionId(HttpServletRequest request) {
+		String cookieVal = this.getCookieVal(request);
+		if (cookieVal != null) {
+			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
+			System.out.println(cookieVal);
+			long sessionId = scanner.nextLong();
+			scanner.close();
+			return sessionId;
+		}
+		return -1;
+	}
+
+	@Override
+	public String getCookieVal(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				String name = cookie.getName();
 				String value = cookie.getValue();
 				if (name.equalsIgnoreCase(COOKIE_NAME)) {
-					Scanner scanner = new Scanner(value).useDelimiter("_");
-					System.out.println(value == null ? "null" : value);
-					long sessionId = scanner.nextLong();
-					long version = scanner.nextLong();
-					long expiration = scanner.nextLong();
-					long metadata = scanner.nextLong();
-					scanner.close();
-					return sessionId;
+					return value;
 				}
 			}
 		}
-		return -1;
+		return null;
 	}
 
 }

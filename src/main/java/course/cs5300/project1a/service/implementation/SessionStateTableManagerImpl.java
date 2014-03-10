@@ -46,11 +46,13 @@ public class SessionStateTableManagerImpl implements SessionStateTableManager {
 	public synchronized SessionContent getSession(long sessionId) {
 		// TODO Auto-generated method stub
 		SessionContent returnVal = sessionMap.get(sessionId);
-		try {
-			returnVal = (SessionContent) returnVal.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (returnVal != null) {
+			try {
+				returnVal = (SessionContent) returnVal.clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return returnVal;
 	}

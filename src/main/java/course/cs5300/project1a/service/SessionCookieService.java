@@ -8,12 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import course.cs5300.project1a.pojo.SessionContent;
 
 public interface SessionCookieService {
-	public SessionContent getSession(HttpServletRequest request);
 
 	public void createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
 	
-	public void updateSession(HttpServletRequest request, HttpServletResponse response,
+	public void updateSession(long sessionId, HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
 
+	public long getSessionId(HttpServletRequest request);
+	public String getCookieVal(HttpServletRequest request);
 }

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
+import course.cs5300.project1a.service.SessionStateTableManager;
 import course.cs5300.project1a.service.VersionManager;
 
 @Named
@@ -21,14 +22,19 @@ import course.cs5300.project1a.service.VersionManager;
 public class SessionDemoBean {
 	private String sessionMessage;
 	private String userInput;
+	
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private SessionContent sessionContent;
 	private long versionOfThisRequest;
 	private Timestamp timestampOfThisRequest;
+	private long sessionId;
 
 	@Inject
 	private SessionCookieService sessionCookieService;
+	
+	@Inject
+	private SessionStateTableManager sessionStateTableManager;
 
 	@Inject
 	private VersionManager versionManager;
@@ -47,6 +53,9 @@ public class SessionDemoBean {
 		this.versionOfThisRequest = this.versionManager.getVersionNumber();
 		java.util.Date date = new java.util.Date();
 		this.timestampOfThisRequest = new Timestamp(date.getTime());
+		checkHttpRequestContent();
+		checkHttpResponseContent();
+		sessionId = -1;
 
 		// ----------------------------------------------
 		System.out
@@ -55,9 +64,8 @@ public class SessionDemoBean {
 	}
 
 	public String getSessionMessage() {
-		checkHttpRequestContent();
-		checkHttpResponseContent();
-		this.sessionContent = this.sessionCookieService.getSession(request);
+		this.sessionId = this.sessionCookieService.getSessionId(request);
+		this.sessionContent = this.sessionStateTableManager.getSession(this.sessionId);
 		if (sessionContent == null) {
 			System.out
 					.println("session NOT found <<------------------------------------------");
@@ -68,7 +76,7 @@ public class SessionDemoBean {
 			System.out
 					.println("session found <<------------------------------------------");
 			this.sessionMessage = this.sessionContent.getMessage();
-			
+			this.sessionCookieService.updateSession(this.sessionId, response, timestampOfThisRequest, versionOfThisRequest);
 		}
 		return sessionMessage;
 	}
@@ -94,8 +102,7 @@ public class SessionDemoBean {
 		System.out
 				.println("refresh clicked<<--------------------------------------------");
 		// ----------------------------------------------
-		checkHttpResponseContent();
-		return "/views/SessionDemo2.xhtml";
+		return "/views/SessionDemo.xhtml";
 	}
 
 	public String logout() {
