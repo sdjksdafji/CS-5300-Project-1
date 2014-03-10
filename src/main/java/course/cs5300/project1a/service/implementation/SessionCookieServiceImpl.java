@@ -23,7 +23,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private SessionStateTableManager sessionStateTableManager;
 
 	@Override
-	public void createSession(HttpServletResponse response,
+	public long createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
@@ -32,20 +32,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 				version, expirationTS);
 		long sessionId = this.sessionStateTableManager
 				.addSession(sessionContent);
-		this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
-	}
-
-	private void writeSessionInfoToCookie(HttpServletResponse response,
-			long sessionId, long version, long expiration, long metadata) {
-		String cookieValue = sessionId + "_" + version + "_" + expiration + "_"
-				+ metadata;
-		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
-		cookie.setMaxAge((int) cookieExpirationTimeInSec);
-		response.addCookie(cookie);
-		// ---------------------------------------------------
-		System.out
-				.println("cookie added to response <<------------------------------");
-		// ---------------------------------------------------
+		return sessionId;
 	}
 
 	@Override
@@ -63,6 +50,24 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 					sessionContent);
 			this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
 		}
+	}
+
+	@Override
+	public void updateSessionMessage(long sessionId, String message) {
+		SessionContent sessionContent = this.sessionStateTableManager
+				.getSession(sessionId);
+		if (sessionContent != null) {
+			sessionContent.setMessage(message);
+			this.sessionStateTableManager.updateSession(sessionId,
+					sessionContent);
+		}
+	}
+
+	@Override
+	public void deleteSession(long sessionId, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		this.sessionStateTableManager.removeSession(sessionId);
+		removeCookie(response);
 	}
 
 	@Override
@@ -93,4 +98,26 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		return null;
 	}
 
+	private void writeSessionInfoToCookie(HttpServletResponse response,
+			long sessionId, long version, long expiration, long metadata) {
+		String cookieValue = sessionId + "_" + version + "_" + expiration + "_"
+				+ metadata;
+		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
+		cookie.setMaxAge((int) cookieExpirationTimeInSec);
+		response.addCookie(cookie);
+		// ---------------------------------------------------
+		System.out
+				.println("cookie added to response <<------------------------------");
+		// ---------------------------------------------------
+	}
+
+	private void removeCookie(HttpServletResponse response) {
+		String cookieValue = "removed";
+		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		// ---------------------------------------------------
+		System.out.println("cookie removed <<------------------------------");
+		// ---------------------------------------------------
+	}
 }

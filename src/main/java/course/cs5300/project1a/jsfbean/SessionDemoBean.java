@@ -22,7 +22,7 @@ import course.cs5300.project1a.service.VersionManager;
 public class SessionDemoBean {
 	private String sessionMessage;
 	private String userInput;
-	
+
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private SessionContent sessionContent;
@@ -32,7 +32,7 @@ public class SessionDemoBean {
 
 	@Inject
 	private SessionCookieService sessionCookieService;
-	
+
 	@Inject
 	private SessionStateTableManager sessionStateTableManager;
 
@@ -53,10 +53,9 @@ public class SessionDemoBean {
 		this.versionOfThisRequest = this.versionManager.getVersionNumber();
 		java.util.Date date = new java.util.Date();
 		this.timestampOfThisRequest = new Timestamp(date.getTime());
-		checkHttpRequestContent();
-		checkHttpResponseContent();
-		sessionId = -1;
-
+		this.checkHttpRequestContent();
+		this.checkHttpResponseContent();
+		this.readSession();
 		// ----------------------------------------------
 		System.out
 				.println("JSF bean initialized<<--------------------------------------------");
@@ -64,19 +63,16 @@ public class SessionDemoBean {
 	}
 
 	public String getSessionMessage() {
-		this.sessionId = this.sessionCookieService.getSessionId(request);
-		this.sessionContent = this.sessionStateTableManager.getSession(this.sessionId);
-		if (sessionContent == null) {
-			System.out
-					.println("session NOT found <<------------------------------------------");
-			this.sessionCookieService.createSession(this.response,
-					timestampOfThisRequest, versionOfThisRequest);
-			this.sessionMessage = "Hello User";
-		} else {
-			System.out
-					.println("session found <<------------------------------------------");
+		// ----------------------------------------------
+		System.out
+				.println("getSessionMsg called<<--------------------------------------------");
+		// ----------------------------------------------
+		this.sessionContent = this.sessionStateTableManager
+				.getSession(this.sessionId);
+		if (this.sessionContent != null) {
 			this.sessionMessage = this.sessionContent.getMessage();
-			this.sessionCookieService.updateSession(this.sessionId, response, timestampOfThisRequest, versionOfThisRequest);
+		} else {
+			this.sessionMessage = "";
 		}
 		return sessionMessage;
 	}
@@ -90,11 +86,19 @@ public class SessionDemoBean {
 	}
 
 	public void setUserInput(String userInput) {
+		// ----------------------------------------------
+		System.out
+				.println("setUserInput called<<--------------------------------------------");
+		// ----------------------------------------------
 		this.userInput = userInput;
 	}
 
 	public String replace() {
-		return null;
+		if (this.userInput != null) {
+			this.sessionCookieService.updateSessionMessage(sessionId,
+					this.userInput);
+		}
+		return "/views/SessionDemo.xhtml";
 	}
 
 	public String refresh() {
@@ -106,7 +110,14 @@ public class SessionDemoBean {
 	}
 
 	public String logout() {
-		return null;
+		// ----------------------------------------------
+		System.out
+				.println("logout clicked<<--------------------------------------------");
+		// ----------------------------------------------
+		this.sessionCookieService.deleteSession(this.sessionId, this.response);
+		this.sessionId = -1;
+		this.sessionContent = null;
+		return "/views/SessionDemo.xhtml";
 	}
 
 	private void checkHttpRequestContent() {
@@ -123,6 +134,32 @@ public class SessionDemoBean {
 					.getExternalContext();
 			this.response = (HttpServletResponse) context.getResponse();
 		}
+	}
+
+	private void readSession() {
+		sessionId = -1;
+		this.sessionId = this.sessionCookieService.getSessionId(request);
+		this.sessionContent = this.sessionStateTableManager
+				.getSession(this.sessionId);
+		if (sessionContent == null) {
+			System.out
+					.println("session NOT found <<------------------------------------------");
+			this.sessionId = this.sessionCookieService
+					.createSession(this.response, timestampOfThisRequest,
+							versionOfThisRequest);
+			this.sessionContent = this.sessionStateTableManager
+					.getSession(this.sessionId);
+		} else {
+			System.out
+					.println("session found <<------------------------------------------");
+		}
+		if (sessionContent == null) {
+			System.err
+					.println("serious error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			throw new NullPointerException();
+		}
+		this.sessionCookieService.updateSession(this.sessionId, response,
+				timestampOfThisRequest, versionOfThisRequest);
 	}
 
 }
