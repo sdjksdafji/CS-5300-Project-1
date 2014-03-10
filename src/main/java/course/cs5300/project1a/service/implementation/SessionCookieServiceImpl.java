@@ -1,6 +1,5 @@
 package course.cs5300.project1a.service.implementation;
 
-
 import java.sql.Timestamp;
 import java.util.Scanner;
 
@@ -25,21 +24,9 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 
 	@Override
 	public SessionContent getSession(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				String name = cookie.getName();
-				String value = cookie.getValue();
-				if (name.equalsIgnoreCase(COOKIE_NAME)) {
-					Scanner scanner = new Scanner(value);
-					long sessionId = scanner.nextLong();
-					long version = scanner.nextLong();
-					long expiration = scanner.nextLong();
-					long metadata = scanner.nextLong();
-					scanner.close();
-					return this.sessionStateTableManager.getSession(sessionId);
-				}
-			}
+		long sessionId = this.getSessionId(request);
+		if (sessionId >= 0) {
+			return this.sessionStateTableManager.getSession(sessionId);
 		}
 		return null;
 	}
@@ -64,7 +51,49 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
 		cookie.setMaxAge((int) cookieExpirationTimeInSec);
 		response.addCookie(cookie);
+		// ---------------------------------------------------
+		System.out
+				.println("cookie added to response <<------------------------------");
+		// ---------------------------------------------------
+	}
 
+	@Override
+	public void updateSession(HttpServletRequest request,
+			HttpServletResponse response, Timestamp currentTimestamp,
+			long version) {
+		// TODO Auto-generated method stub
+		long sessionId = this.getSessionId(request);
+		SessionContent sessionContent = this.sessionStateTableManager
+				.getSession(sessionId);
+		if (sessionContent != null) {
+			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
+					+ cookieExpirationTimeInSec * 60);
+			sessionContent.setExpirationTimestamp(expirationTS);
+			sessionContent.setVersion(version);
+			this.sessionStateTableManager.updateSession(sessionId,
+					sessionContent);
+		}
+	}
+
+	private long getSessionId(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				String name = cookie.getName();
+				String value = cookie.getValue();
+				if (name.equalsIgnoreCase(COOKIE_NAME)) {
+					Scanner scanner = new Scanner(value).useDelimiter("_");
+					System.out.println(value == null ? "null" : value);
+					long sessionId = scanner.nextLong();
+					long version = scanner.nextLong();
+					long expiration = scanner.nextLong();
+					long metadata = scanner.nextLong();
+					scanner.close();
+					return sessionId;
+				}
+			}
+		}
+		return -1;
 	}
 
 }

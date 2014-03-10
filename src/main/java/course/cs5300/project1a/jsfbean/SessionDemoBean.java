@@ -29,7 +29,7 @@ public class SessionDemoBean {
 
 	@Inject
 	private SessionCookieService sessionCookieService;
-	
+
 	@Inject
 	private VersionManager versionManager;
 
@@ -41,11 +41,11 @@ public class SessionDemoBean {
 		// ----------------------------------------------
 
 	}
-	
+
 	@PostConstruct
-	private void init(){
-		this.versionOfThisRequest = 2;// this.versionManager.getVersionNumber();
-		java.util.Date date= new java.util.Date();
+	private void init() {
+		this.versionOfThisRequest = this.versionManager.getVersionNumber();
+		java.util.Date date = new java.util.Date();
 		this.timestampOfThisRequest = new Timestamp(date.getTime());
 
 		// ----------------------------------------------
@@ -55,17 +55,21 @@ public class SessionDemoBean {
 	}
 
 	public String getSessionMessage() {
-		checkHttpContent();
+		checkHttpRequestContent();
+		checkHttpResponseContent();
 		this.sessionContent = this.sessionCookieService.getSession(request);
 		if (sessionContent == null) {
-			this.sessionCookieService.createSession(response, timestampOfThisRequest, versionOfThisRequest);
-			this.sessionContent = this.sessionCookieService.getSession(request);
-			if(sessionContent == null){
-				throw new NullPointerException();
-			}
-		} 
+			System.out
+					.println("session NOT found <<------------------------------------------");
+			this.sessionCookieService.createSession(this.response,
+					timestampOfThisRequest, versionOfThisRequest);
+			this.sessionMessage = "Hello User";
+		} else {
+			System.out
+					.println("session found <<------------------------------------------");
 			this.sessionMessage = this.sessionContent.getMessage();
-		
+			
+		}
 		return sessionMessage;
 	}
 
@@ -90,7 +94,7 @@ public class SessionDemoBean {
 		System.out
 				.println("refresh clicked<<--------------------------------------------");
 		// ----------------------------------------------
-
+		checkHttpResponseContent();
 		return "/views/SessionDemo2.xhtml";
 	}
 
@@ -98,12 +102,19 @@ public class SessionDemoBean {
 		return null;
 	}
 
-	private void checkHttpContent() {
-		if (this.request == null || this.response == null) {
+	private void checkHttpRequestContent() {
+		if (this.request == null) {
 			ExternalContext context = FacesContext.getCurrentInstance()
 					.getExternalContext();
 			this.request = (HttpServletRequest) context.getRequest();
-			this.response = (HttpServletResponse) context.getRequest();
+		}
+	}
+
+	private void checkHttpResponseContent() {
+		if (this.response == null) {
+			ExternalContext context = FacesContext.getCurrentInstance()
+					.getExternalContext();
+			this.response = (HttpServletResponse) context.getResponse();
 		}
 	}
 

@@ -12,5 +12,8 @@ public interface SessionCookieService {
 
 	public void createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
+	
+	public void updateSession(HttpServletRequest request, HttpServletResponse response,
+			Timestamp currentTimestamp, long version);
 
 }
