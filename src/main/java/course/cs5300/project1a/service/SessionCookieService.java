@@ -22,4 +22,5 @@ public interface SessionCookieService {
 	public long getSessionId(HttpServletRequest request);
 
 	public String getCookieVal(HttpServletRequest request);
+	
 }

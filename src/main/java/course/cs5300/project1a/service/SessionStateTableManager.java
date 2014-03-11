@@ -10,4 +10,6 @@ public interface SessionStateTableManager {
 	public SessionContent getSession(long sessionId);
 
 	public void removeSession(long sessionId);
+	
+	public void removeExpiredSession();
 }
