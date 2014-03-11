@@ -1,6 +1,7 @@
 package course.cs5300.project1a.service.implementation;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Scanner;
 
 import javax.inject.Inject;
@@ -8,6 +9,9 @@ import javax.inject.Named;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
@@ -17,7 +21,7 @@ import course.cs5300.project1a.service.SessionStateTableManager;
 public class SessionCookieServiceImpl implements SessionCookieService {
 
 	private static final String COOKIE_NAME = "CS5300PROJ1SESSIONBYSW773";
-	private static final long cookieExpirationTimeInSec = 60;
+	private static final long cookieExpirationTimeInSec = 5;
 
 	@Inject
 	private SessionStateTableManager sessionStateTableManager;
@@ -120,4 +124,6 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		System.out.println("cookie removed <<------------------------------");
 		// ---------------------------------------------------
 	}
+
+
 }
