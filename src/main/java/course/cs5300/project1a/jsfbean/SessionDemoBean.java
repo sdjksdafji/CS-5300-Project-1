@@ -98,7 +98,8 @@ public class SessionDemoBean {
 		this.sessionContent = this.sessionStateTableManager
 				.getSession(this.sessionId);
 		if (this.sessionContent != null) {
-			this.sessionExpireTime = this.sessionContent.getExpirationTimestamp().toString();
+			this.sessionExpireTime = this.sessionContent
+					.getExpirationTimestamp().toString();
 		} else {
 			this.sessionExpireTime = "";
 		}
