@@ -21,7 +21,7 @@ import course.cs5300.project1a.service.SessionStateTableManager;
 public class SessionCookieServiceImpl implements SessionCookieService {
 
 	private static final String COOKIE_NAME = "CS5300PROJ1SESSIONBYSW773";
-	private static final long cookieExpirationTimeInSec = 5;
+	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
 	private SessionStateTableManager sessionStateTableManager;
@@ -31,7 +31,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
-				+ cookieExpirationTimeInSec * 60);
+				+ cookieExpirationTimeInSec * 1000);
 		SessionContent sessionContent = new SessionContent("Hello User",
 				version, expirationTS);
 		long sessionId = this.sessionStateTableManager
@@ -47,7 +47,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 				.getSession(sessionId);
 		if (sessionContent != null) {
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
-					+ cookieExpirationTimeInSec * 60);
+					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
 			sessionContent.setVersion(version);
 			this.sessionStateTableManager.updateSession(sessionId,

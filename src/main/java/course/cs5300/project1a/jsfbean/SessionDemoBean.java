@@ -22,6 +22,7 @@ import course.cs5300.project1a.service.VersionManager;
 public class SessionDemoBean {
 	private String sessionMessage;
 	private String userInput;
+	private String sessionExpireTime;
 
 	private HttpServletRequest request;
 	private HttpServletResponse response;
@@ -91,6 +92,21 @@ public class SessionDemoBean {
 				.println("setUserInput called<<--------------------------------------------");
 		// ----------------------------------------------
 		this.userInput = userInput;
+	}
+
+	public String getSessionExpireTime() {
+		this.sessionContent = this.sessionStateTableManager
+				.getSession(this.sessionId);
+		if (this.sessionContent != null) {
+			this.sessionExpireTime = this.sessionContent.getExpirationTimestamp().toString();
+		} else {
+			this.sessionExpireTime = "";
+		}
+		return sessionExpireTime;
+	}
+
+	public void setSessionExpireTime(String sessionExpireTime) {
+		this.sessionExpireTime = sessionExpireTime;
 	}
 
 	public String replace() {

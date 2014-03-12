@@ -21,6 +21,9 @@
 
 			<h:outputLabel value="Session Message: " />
 			<h:outputLabel value="#{sessionDemoBean.sessionMessage}" />
+			
+						<h:outputLabel value="Session Expires at: " />
+			<h:outputLabel value="#{sessionDemoBean.sessionExpireTime}" />
 
 			<h:outputLabel value="User Input: " />
 			<p:inputText value="#{sessionDemoBean.userInput}" required="false"

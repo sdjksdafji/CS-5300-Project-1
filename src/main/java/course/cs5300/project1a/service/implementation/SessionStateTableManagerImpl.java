@@ -70,7 +70,7 @@ public class SessionStateTableManagerImpl implements SessionStateTableManager {
 	}
 	
 	@Override
-	@Scheduled(initialDelay=1000, fixedRate=5000)
+	@Scheduled(initialDelay=45000, fixedRate=45000)
 	@Async
 	public synchronized void removeExpiredSession() {
 		// TODO Auto-generated method stub
