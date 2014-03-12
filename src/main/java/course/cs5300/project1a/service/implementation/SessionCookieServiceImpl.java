@@ -21,6 +21,7 @@ import course.cs5300.project1a.service.SessionStateTableManager;
 public class SessionCookieServiceImpl implements SessionCookieService {
 
 	private static final String COOKIE_NAME = "CS5300PROJ1SESSIONBYSW773";
+
 	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
@@ -124,6 +125,5 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		System.out.println("cookie removed <<------------------------------");
 		// ---------------------------------------------------
 	}
-
 
 }
