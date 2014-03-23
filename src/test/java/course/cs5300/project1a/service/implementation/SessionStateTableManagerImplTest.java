@@ -9,12 +9,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
-public class VersionManagerImplTest {
-	
+public class SessionStateTableManagerImplTest {
 
 	@Test
 	public void test() {
-		//fail("Not yet implemented");
+		fail("Not yet implemented");
 	}
 
 }
