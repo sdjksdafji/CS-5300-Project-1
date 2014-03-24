@@ -16,13 +16,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Named
 public class RPCServerListener {
 
-	private static final int RPC_PORT = 5301;
-	private static final int BUFFER_SIZE = 1024;
+	public static final int RPC_PORT = 5301;
+	public static final int BUFFER_SIZE = 1024;
 
 	@Inject
 	private ApplicationContext applicationContext;
 
-	@Inject
+	@Inject @Named("myExecutor")
 	private TaskExecutor taskExecutor;
 
 	@Scheduled(initialDelay = 500, fixedRate = java.lang.Long.MAX_VALUE)

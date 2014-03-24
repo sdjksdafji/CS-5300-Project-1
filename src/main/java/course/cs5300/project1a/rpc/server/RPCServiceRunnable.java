@@ -6,7 +6,7 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-@Named("RPCServiceRunnable")
+@Named
 @Scope("prototype")
 public class RPCServiceRunnable implements Runnable {
 
