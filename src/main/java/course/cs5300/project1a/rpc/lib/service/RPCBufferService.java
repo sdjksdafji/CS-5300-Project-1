@@ -13,7 +13,7 @@ public interface RPCBufferService {
 
 	// reverse of the previous function
 	public void receiveReadSessionBuffer(byte[] inBuf, int bufferLength,
-			Integer callId, SessionID sessionId, Long versionNumber);
+			SessionID sessionId, Long versionNumber);
 	
 	public int sendRepleyReadSessionBuffer();
 	public int receiveRepleyReadSessionBuffer();
@@ -24,9 +24,13 @@ public interface RPCBufferService {
 	public int sendWriteSessionBuffer(byte[] outBuf, int callId,
 			SessionID sessionId, SessionContent sessionContent);
 	
-	public int receiveWriteSessionBuffer(byte[] outBuf, int callId,
+	public int receiveWriteSessionBuffer(byte[] outBuf, 
 			SessionID sessionId, SessionContent sessionContent);
 	
 	public int sendRepleyWriteSessionBuffer();
 	public int receiveRepleyWriteSessionBuffer();
+	
+	
+	public int getCallId(byte[] buf);
+	public byte getOpCode(byte[] buf);
 }
