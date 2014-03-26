@@ -1,6 +1,8 @@
 package course.cs5300.project1a.pojo;
 
+import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class SessionContent {
 	private String message; // 512 - 8 - 8 = 496 bytes. internal encoding is 2
@@ -8,6 +10,7 @@ public class SessionContent {
 	private long version; // 64 bit = 8 bytes
 	private Timestamp expirationTimestamp; // getTime() is a long; 64 bits = 8
 											// bytes
+	private List<InetAddress> metadata;
 
 	private static int STRING_SIZE_LIMIT = 248;
 
@@ -56,6 +59,14 @@ public class SessionContent {
 
 	public void setExpirationTimestamp(Timestamp expirationTimestamp) {
 		this.expirationTimestamp = expirationTimestamp;
+	}
+
+	public List<InetAddress> getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(List<InetAddress> metadata) {
+		this.metadata = metadata;
 	}
 
 }

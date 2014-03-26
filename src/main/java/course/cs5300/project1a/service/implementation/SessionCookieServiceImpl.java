@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
-import course.cs5300.project1a.service.SessionStateTableManager;
+import course.cs5300.project1a.service.LocalSessionTableManager;
 
 @Named
 public class SessionCookieServiceImpl implements SessionCookieService {
@@ -25,7 +25,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
-	private SessionStateTableManager sessionStateTableManager;
+	private LocalSessionTableManager sessionStateTableManager;
 
 	@Override
 	public long createSession(HttpServletResponse response,

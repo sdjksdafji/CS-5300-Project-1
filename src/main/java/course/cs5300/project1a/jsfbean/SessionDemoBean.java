@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
-import course.cs5300.project1a.service.SessionStateTableManager;
+import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.service.VersionManager;
 
 @Named
@@ -35,7 +35,7 @@ public class SessionDemoBean {
 	private SessionCookieService sessionCookieService;
 
 	@Inject
-	private SessionStateTableManager sessionStateTableManager;
+	private LocalSessionTableManager sessionStateTableManager;
 
 	@Inject
 	private VersionManager versionManager;

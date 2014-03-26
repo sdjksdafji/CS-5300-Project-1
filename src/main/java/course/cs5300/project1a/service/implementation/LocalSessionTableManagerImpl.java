@@ -14,11 +14,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.pojo.SessionContent;
-import course.cs5300.project1a.service.SessionStateTableManager;
+import course.cs5300.project1a.service.LocalSessionTableManager;
 
 @Named
 @Scope("singleton")
-public class SessionStateTableManagerImpl implements SessionStateTableManager {
+public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 
 	private static Map<Long, SessionContent> sessionMap = new HashMap<Long, SessionContent>();
 	private static long currentSessionId = 0;
