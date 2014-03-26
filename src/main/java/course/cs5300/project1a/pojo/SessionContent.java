@@ -10,7 +10,6 @@ public class SessionContent {
 	private long version; // 64 bit = 8 bytes
 	private Timestamp expirationTimestamp; // getTime() is a long; 64 bits = 8
 											// bytes
-	private List<InetAddress> metadata;
 
 	private static int STRING_SIZE_LIMIT = 248;
 
@@ -59,14 +58,6 @@ public class SessionContent {
 
 	public void setExpirationTimestamp(Timestamp expirationTimestamp) {
 		this.expirationTimestamp = expirationTimestamp;
-	}
-
-	public List<InetAddress> getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(List<InetAddress> metadata) {
-		this.metadata = metadata;
 	}
 
 }
