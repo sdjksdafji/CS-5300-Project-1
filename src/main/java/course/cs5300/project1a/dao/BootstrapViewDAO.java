@@ -1,10 +1,10 @@
 package course.cs5300.project1a.dao;
 
-import java.net.InetAddress;
-import java.util.List;
+
+import course.cs5300.project1a.pojo.View;
 
 public interface BootstrapViewDAO {
-	public void setBootstrapView(List<InetAddress> view);
+	public void setBootstrapView(View view);
 
-	public List<InetAddress> getBootstrapView();
+	public View getBootstrapView();
 }

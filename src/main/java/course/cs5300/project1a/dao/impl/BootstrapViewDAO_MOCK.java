@@ -6,21 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import course.cs5300.project1a.dao.BootstrapViewDAO;
+import course.cs5300.project1a.pojo.View;
 
 public class BootstrapViewDAO_MOCK implements BootstrapViewDAO {
 
 	@Override
-	public void setBootstrapView(List<InetAddress> view) {
+	public void setBootstrapView(View view) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<InetAddress> getBootstrapView() {
-		ArrayList<InetAddress> returnVal = new ArrayList<InetAddress>();
+	public View getBootstrapView() {
+		View returnVal = new View();
 		try {
-			returnVal.add(InetAddress.getByName("192.168.1.1"));
-			returnVal.add(InetAddress.getByName("192.168.1.2"));
+			returnVal.getIpAddresses().add(InetAddress.getByName("192.168.1.1"));
+			returnVal.getIpAddresses().add(InetAddress.getByName("192.168.1.2"));
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
