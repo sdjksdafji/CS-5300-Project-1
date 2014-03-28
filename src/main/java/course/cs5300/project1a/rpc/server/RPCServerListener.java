@@ -22,7 +22,8 @@ public class RPCServerListener {
 	@Inject
 	private ApplicationContext applicationContext;
 
-	@Inject @Named("myExecutor")
+	@Inject
+	@Named("myExecutor")
 	private TaskExecutor taskExecutor;
 
 	@Scheduled(initialDelay = 500, fixedRate = java.lang.Long.MAX_VALUE)
@@ -52,6 +53,7 @@ public class RPCServerListener {
 						.getBean(RPCServiceRunnable.class);
 				thread.setInBuf(inBuf);
 				thread.setUdpPacket(udpPacket);
+				thread.setUdpSocket(udpSocket);
 				this.taskExecutor.execute(thread);
 			}
 		} else {
