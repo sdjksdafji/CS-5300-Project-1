@@ -10,7 +10,7 @@ public interface RPCClientService {
 	public SessionContent readSession(InetAddress serverId,
 			SessionID sessionId, long version);
 
-	public boolean writeSession(InetAddress serverId,
+	public boolean writeSession(InetAddress serverId, SessionID sessionId,
 			SessionContent sessionContent);
 
 	public List<InetAddress> getView(InetAddress serverId);

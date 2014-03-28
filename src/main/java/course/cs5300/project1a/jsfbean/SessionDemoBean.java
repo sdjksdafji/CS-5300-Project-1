@@ -69,7 +69,7 @@ public class SessionDemoBean {
 				.println("getSessionMsg called<<--------------------------------------------");
 		// ----------------------------------------------
 		this.sessionContent = this.sessionStateTableManager
-				.getSession(this.sessionId);
+				.getSession(null); // all null equals this.sessionId
 		if (this.sessionContent != null) {
 			this.sessionMessage = this.sessionContent.getMessage();
 		} else {
@@ -96,7 +96,7 @@ public class SessionDemoBean {
 
 	public String getSessionExpireTime() {
 		this.sessionContent = this.sessionStateTableManager
-				.getSession(this.sessionId);
+				.getSession(null);
 		if (this.sessionContent != null) {
 			this.sessionExpireTime = this.sessionContent
 					.getExpirationTimestamp().toString();
@@ -157,7 +157,7 @@ public class SessionDemoBean {
 		sessionId = -1;
 		this.sessionId = this.sessionCookieService.getSessionId(request);
 		this.sessionContent = this.sessionStateTableManager
-				.getSession(this.sessionId);
+				.getSession(null);
 		if (sessionContent == null) {
 			System.out
 					.println("session NOT found <<------------------------------------------");
@@ -165,7 +165,7 @@ public class SessionDemoBean {
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
 			this.sessionContent = this.sessionStateTableManager
-					.getSession(this.sessionId);
+					.getSession(null);
 		} else {
 			System.out
 					.println("session found <<------------------------------------------");

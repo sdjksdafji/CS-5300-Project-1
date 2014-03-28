@@ -35,8 +35,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 				+ cookieExpirationTimeInSec * 1000);
 		SessionContent sessionContent = new SessionContent("Hello User",
 				version, expirationTS);
-		long sessionId = this.sessionStateTableManager
-				.addSession(sessionContent);
+		long sessionId =  -1;//this.sessionStateTableManager.addSession(sessionContent);
 		return sessionId;
 	}
 
@@ -45,13 +44,13 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
 		SessionContent sessionContent = this.sessionStateTableManager
-				.getSession(sessionId);
+				.getSession(null);
 		if (sessionContent != null) {
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
 			sessionContent.setVersion(version);
-			this.sessionStateTableManager.updateSession(sessionId,
+			this.sessionStateTableManager.updateSession(null,
 					sessionContent);
 			this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
 		}
@@ -60,10 +59,10 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	@Override
 	public void updateSessionMessage(long sessionId, String message) {
 		SessionContent sessionContent = this.sessionStateTableManager
-				.getSession(sessionId);
+				.getSession(null); // null = sessionId
 		if (sessionContent != null) {
 			sessionContent.setMessage(message);
-			this.sessionStateTableManager.updateSession(sessionId,
+			this.sessionStateTableManager.updateSession(null,
 					sessionContent);
 		}
 	}
@@ -71,7 +70,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	@Override
 	public void deleteSession(long sessionId, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		this.sessionStateTableManager.removeSession(sessionId);
+		this.sessionStateTableManager.removeSession(null);
 		removeCookie(response);
 	}
 
