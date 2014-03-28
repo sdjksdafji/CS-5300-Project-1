@@ -5,6 +5,7 @@ import java.util.List;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
+import course.cs5300.project1a.pojo.View;
 
 public interface RPCBufferService {
 
@@ -66,8 +67,7 @@ public interface RPCBufferService {
 	// return the length of buffer
 	// input:[callId, view]
 	// output:[outBuf, length]
-	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId,
-			List<InetAddress> view);
+	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId, View view);
 
 	// reverse of previous function
 	public List<InetAddress> getViewFromReplyOfGetViewBuffer(byte[] inBuf,

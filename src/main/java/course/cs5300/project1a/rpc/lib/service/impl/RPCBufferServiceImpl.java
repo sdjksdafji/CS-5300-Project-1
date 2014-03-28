@@ -79,7 +79,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 	@Override
 	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId,
-			List<InetAddress> view) {
+			View view) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
