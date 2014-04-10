@@ -55,9 +55,18 @@ public class RPCClientServiceImpl implements RPCClientService {
 			udpSocket.send(sendPkt);
 		} catch (IOException e) {
 			e.printStackTrace();
+			udpSocket.close();
 			return null;
 		}
 
+		try {
+			udpSocket.setSoTimeout(RPCServerListener.SOCKET_TIMEOUT);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			udpSocket.close();
+			return null;
+		}
 		byte[] inBuf = new byte[RPCServerListener.BUFFER_SIZE];
 		DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
 		try {
@@ -69,6 +78,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 		} catch (InterruptedIOException iioe) {
 			// timeout
 			this.gossipService.remove(serverId);
+			System.out.println("time out !!");
 			recvPkt = null;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -109,6 +119,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 			udpSocket.send(sendPkt);
 		} catch (IOException e) {
 			e.printStackTrace();
+			udpSocket.close();
 			return false;
 		}
 
@@ -139,7 +150,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 			udpSocket = new DatagramSocket();
 		} catch (SocketException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 
 		int callId = this.callIdService.getCallID();
@@ -153,6 +164,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 			udpSocket.send(sendPkt);
 		} catch (IOException e) {
 			e.printStackTrace();
+			udpSocket.close();
 			return null;
 		}
 

@@ -54,7 +54,8 @@ public class RPCServiceRunnable implements Runnable {
 							this.inBuf.length);
 			SessionContent returnSession = this.localSessionTableManager
 					.getSession(sessionId);
-			if (returnSession.getVersion() < versionNum) {
+			if (returnSession != null
+					&& returnSession.getVersion() < versionNum) {
 				returnSession = null;
 			}
 			replyPacktLength = this.rpcBufferService
@@ -81,6 +82,7 @@ public class RPCServiceRunnable implements Runnable {
 			break;
 		}
 		}
+
 		DatagramPacket replyPkt = new DatagramPacket(outBuf, replyPacktLength,
 				requestPacket.getAddress(), requestPacket.getPort());
 		try {

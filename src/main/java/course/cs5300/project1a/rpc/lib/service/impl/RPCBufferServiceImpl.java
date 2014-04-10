@@ -5,6 +5,7 @@ import java.util.List;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
+import course.cs5300.project1a.pojo.View;
 import course.cs5300.project1a.rpc.lib.service.RPCBufferService;
 
 public class RPCBufferServiceImpl implements RPCBufferService {
@@ -77,12 +78,6 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		return 0;
 	}
 
-	@Override
-	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId,
-			View view) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public List<InetAddress> getViewFromReplyOfGetViewBuffer(byte[] inBuf,
@@ -99,6 +94,12 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 	@Override
 	public byte getOpCodeFromReplyBuffer(byte[] buf) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId, View view) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
