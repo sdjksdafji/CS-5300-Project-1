@@ -26,6 +26,8 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 			String lineText = null;
 			if((lineText=bufferedReader.readLine())!=null){
 				String[] strings = lineText.split("\\s");
+				//System.out.println(strings[0]);
+				//System.out.println(strings[1]);
 				return InetAddress.getByName(strings[1]);
 			}
 		} catch (IOException e) {
