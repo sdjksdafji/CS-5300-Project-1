@@ -33,3 +33,7 @@ Format:
 Cookie format: key = "CS5300PROJ1SESSIONBYSW773" value = sessionId (including local session num + server ip) + "_" + version + "_" + expiration + "_"	+ metadata (includes 2 ip address in our case)
 
 RPC format: All rpc request and response are formatted in a single UDP packet. The details about the udp buffer is in the file "RPC format.pdf"
+
+Beanstalk Configuration:
+In AWS EC2, we set the rules in the instance's security group, and open the ports we may use in the project. In AWS Elastic Beanstalk, we set the server to tomcat and upload our war file. 
+
