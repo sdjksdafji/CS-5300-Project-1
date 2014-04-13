@@ -44,7 +44,7 @@ public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 	public BootstrapViewDAOImpl(){
 		Properties properties = new Properties();
 		try {
-			properties.load(BootstrapViewDAOImpl.class.getResourceAsStream("/AwsCredentials.properties"));
+			properties.load(BootstrapViewDAOImpl.class.getResourceAsStream("AwsCredentials.properties"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

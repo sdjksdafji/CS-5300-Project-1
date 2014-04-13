@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import javax.inject.Named;
+
 import course.cs5300.project1a.service.GetLocalIPService;
 
+@Named
 public class GetLocalIPServiceImpl implements GetLocalIPService {
 
 	@Override
