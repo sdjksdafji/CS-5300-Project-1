@@ -8,14 +8,9 @@ JSF
 
 Primefaces.
 
-Cookie format: key = "CS5300PROJ1SESSIONBYSW773" value = sessionId + "_" + version + "_" + expiration + "_"	+ metadata
+Cookie format: key = "CS5300PROJ1SESSIONBYSW773" value = sessionId (including local session num + server ip) + "_" + version + "_" + expiration + "_"	+ metadata (includes 2 ip address in our case)
 
-Session table is a hash map of <key = sesion id, value = message, version, expiration timestamp>
+local session table is a hash map of <key = sessionId (including local session num + server ip), value = message, version, expiration timestamp>
 
 The way I delete time-out session is to run a thread every 45 seconds. The thread go through the whole session table, compares every session content's expiration timestamp to the current time. If the timestamp is before the current time, it will be removed from session table.
 
-SessionDemoBean is the jsf bean class.
-SessionContent is a pojo storing the session information.
-SessionCookieService deals with the logic of operating cookie and session.
-SessionStateTableManager deal with the logic of maintaining the session table.
-VersionManager generates version number by incrementing by 1 on each request.
