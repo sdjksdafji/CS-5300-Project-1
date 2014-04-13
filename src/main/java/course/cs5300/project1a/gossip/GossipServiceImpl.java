@@ -1,7 +1,10 @@
 package course.cs5300.project1a.gossip;
 
 import java.net.InetAddress;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -11,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.dao.BootstrapViewDAO;
 import course.cs5300.project1a.pojo.View;
+import course.cs5300.project1a.rpc.client.service.RPCClientService;
 import course.cs5300.project1a.service.GetLocalIPService;
 
 @Named
@@ -19,12 +23,16 @@ public class GossipServiceImpl implements GossipService {
 	private static View view = new View();
 	private static final int VIEW_SIZE = 5;
 	private static final int GOSSIP_SECS = 60;
+	private static final int CONNECT_INTERVAL = 45;
 	
 	@Inject
 	private BootstrapViewDAO bootstrapViewDAO;
 	
 	@Inject
 	private GetLocalIPService getLocalIPService;
+	
+	@Inject
+	private RPCClientService rpcClientService;
 
 	@Override
 	public synchronized void shrink(int k) {
@@ -88,5 +96,20 @@ public class GossipServiceImpl implements GossipService {
 			}
 		 }
 	}
+	
+	@Scheduled(initialDelay = 5000, fixedRate = CONNECT_INTERVAL * 1000)
+	@Async
+	public void gossipConnect() {
+		System.out.println("gossip connects to a random node in the view");
+		InetAddress peer = this.view.choose();
+		if (peer != null) {
+			List<InetAddress> list = this.rpcClientService.getView(peer);
+			Set<InetAddress> set = new HashSet<InetAddress>(list);
+			View peerView = new View();
+			peerView.setIpAddresses(set);
+			this.union(peerView);
+		}
+	}
+
 
 }

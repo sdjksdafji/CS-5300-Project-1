@@ -20,4 +20,6 @@ public interface GossipService {
 	public void updateBootstrapView();
 	
 	public void runUpdateBootstrapView();
+	
+	public void gossipConnect();
 }
