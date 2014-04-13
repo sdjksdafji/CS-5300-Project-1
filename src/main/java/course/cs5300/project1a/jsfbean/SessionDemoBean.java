@@ -1,6 +1,9 @@
 package course.cs5300.project1a.jsfbean;
 
+import java.net.InetAddress;
 import java.sql.Timestamp;
+
+import course.cs5300.project1a.pojo.SessionID;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -10,12 +13,15 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import course.cs5300.project1a.service.*;
+
 import org.springframework.context.annotation.Scope;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.service.VersionManager;
+import course.cs5300.project1a.dao.*;;
 
 @Named
 @Scope("request")
@@ -29,13 +35,19 @@ public class SessionDemoBean {
 	private SessionContent sessionContent;
 	private long versionOfThisRequest;
 	private Timestamp timestampOfThisRequest;
-	private long sessionId;
+	private SessionID sessionId;
 
+	@Inject
+	private GetLocalIPService getLocalIPService;
+	
 	@Inject
 	private SessionCookieService sessionCookieService;
 
 	@Inject
 	private LocalSessionTableManager sessionStateTableManager;
+	
+	@Inject
+	private SessionDAO sessionDAO;
 
 	@Inject
 	private VersionManager versionManager;
@@ -122,6 +134,7 @@ public class SessionDemoBean {
 		// ----------------------------------------------
 		System.out
 				.println("refresh clicked<<--------------------------------------------");
+		
 		// ----------------------------------------------
 		return "/views/SessionDemo.xhtml";
 	}
@@ -132,7 +145,7 @@ public class SessionDemoBean {
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
 		this.sessionCookieService.deleteSession(this.sessionId, this.response);
-		this.sessionId = -1;
+		this.sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
 		this.sessionContent = null;
 		return "/views/SessionDemo.xhtml";
 	}
@@ -154,7 +167,7 @@ public class SessionDemoBean {
 	}
 
 	private void readSession() {
-		sessionId = -1;
+		sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
 		this.sessionId = this.sessionCookieService.getSessionId(request);
 		this.sessionContent = this.sessionStateTableManager
 				.getSession(null);

@@ -133,6 +133,14 @@
 			<version>2.5</version>
 		</dependency>
 
+		<!-- Amazon simpleDB -->
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+
 
 	</dependencies>
 	<build>

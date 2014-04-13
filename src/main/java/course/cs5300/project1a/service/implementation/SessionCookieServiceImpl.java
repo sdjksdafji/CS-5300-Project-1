@@ -14,8 +14,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.pojo.SessionContent;
+import course.cs5300.project1a.service.GetLocalIPService;
 import course.cs5300.project1a.service.SessionCookieService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
+import course.cs5300.project1a.pojo.SessionID;
+import course.cs5300.project1a.service.*;
 
 @Named
 public class SessionCookieServiceImpl implements SessionCookieService {
@@ -25,21 +28,23 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
+	private GetLocalIPService getLocalIPService;
+	
+	@Inject
 	private LocalSessionTableManager sessionStateTableManager;
 
 	@Override
-	public long createSession(HttpServletResponse response,
+	public SessionID createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 				+ cookieExpirationTimeInSec * 1000);
 		SessionContent sessionContent = new SessionContent("Hello User",
 				version, expirationTS);
-		long sessionId =  -1;//this.sessionStateTableManager.addSession(sessionContent);
+		SessionID sessionId =  new SessionID(-1,getLocalIPService.getLocalIP());//this.sessionStateTableManager.addSession(sessionContent);
 		return sessionId;
 	}
 
-	@Override
 	public void updateSession(long sessionId, HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
@@ -56,8 +61,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		}
 	}
 
-	@Override
-	public void updateSessionMessage(long sessionId, String message) {
+	public void updateSessionMessage(SessionID sessionId, String message) {
 		SessionContent sessionContent = this.sessionStateTableManager
 				.getSession(null); // null = sessionId
 		if (sessionContent != null) {
@@ -67,7 +71,6 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		}
 	}
 
-	@Override
 	public void deleteSession(long sessionId, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		this.sessionStateTableManager.removeSession(null);
@@ -75,16 +78,16 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	}
 
 	@Override
-	public long getSessionId(HttpServletRequest request) {
+	public SessionID getSessionId(HttpServletRequest request) {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
 			System.out.println(cookieVal);
-			long sessionId = scanner.nextLong();
+			SessionID sessionId = new SessionID(scanner.nextLong(),getLocalIPService.getLocalIP());
 			scanner.close();
 			return sessionId;
 		}
-		return -1;
+		return new SessionID(-1,getLocalIPService.getLocalIP());
 	}
 
 	@Override
@@ -123,6 +126,25 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		// ---------------------------------------------------
 		System.out.println("cookie removed <<------------------------------");
 		// ---------------------------------------------------
+	}
+
+	public void updateSessionMessage(long sessionId, String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateSession(SessionID sessionId,
+			HttpServletResponse response, Timestamp currentTimestamp,
+			long version) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteSession(SessionID sessionId, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
