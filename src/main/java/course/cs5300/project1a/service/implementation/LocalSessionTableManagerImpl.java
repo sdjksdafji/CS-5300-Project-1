@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import course.cs5300.project1a.jsfbean.ServerInfoBean;
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
+import course.cs5300.project1a.service.GetLocalIPService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
 
 @Named
@@ -27,7 +27,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	private static Map<SessionID, SessionContent> sessionMap = new HashMap<SessionID, SessionContent>();
 	private static long currentSessionId = 0;
 	@Inject
-	private ServerInfoBean serverInfoBean;
+	private GetLocalIPService getLocalIpService;
 	@Override
 	public SessionID addSession(SessionContent sessionContent) {
 		// TODO Auto-generated method stub
@@ -35,7 +35,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		currentSessionId = sessionNumber+1;
 		SessionID newSessionID = null;
 		try {
-			InetAddress addr = InetAddress.getByName(serverInfoBean.getIpAddress().toString());
+			InetAddress addr = InetAddress.getByName(getLocalIpService.getLocalIP().toString());
 			newSessionID = new SessionID(sessionNumber,addr);
 			sessionMap.put(newSessionID, (SessionContent) sessionContent.clone());
 		} catch (CloneNotSupportedException e) {
