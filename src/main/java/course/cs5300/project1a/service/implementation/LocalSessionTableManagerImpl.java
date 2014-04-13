@@ -31,7 +31,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public SessionID addSession(SessionContent sessionContent) {
 		// TODO Auto-generated method stub
-		long sessionNumber = Math.max(sessionContent.getVersion(), currentSessionId++);
+		long sessionNumber = Math.max(sessionContent.getVersion(), currentSessionId);
 		currentSessionId = sessionNumber+1;
 		SessionID newSessionID = null;
 		try {
@@ -51,6 +51,10 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public void updateSession(SessionID sessionId, SessionContent sessionContent) {
 		// TODO Auto-generated method stub
+		if(sessionContent.getVersion()==-1){
+			removeSession(sessionId);
+			return;
+		}
 		try {
 			sessionMap.put(sessionId, (SessionContent) sessionContent.clone());
 		} catch (CloneNotSupportedException e) {
