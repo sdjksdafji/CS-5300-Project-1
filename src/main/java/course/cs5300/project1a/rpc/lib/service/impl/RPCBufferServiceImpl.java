@@ -8,12 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Named;
+
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
 import course.cs5300.project1a.pojo.View;
 import course.cs5300.project1a.rpc.lib.RPCOperationCode;
 import course.cs5300.project1a.rpc.lib.service.RPCBufferService;
 
+@Named
 public class RPCBufferServiceImpl implements RPCBufferService {
 
 	@Override
