@@ -40,6 +40,7 @@ public class SessionDAOImpl implements SessionDAO {
 			sessionId = localSessionTableManager.addSession(temp);
 			sessionContent = temp;
 		}
+		
 		return sessionId;
 	}
 
