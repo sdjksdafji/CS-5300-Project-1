@@ -94,7 +94,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		int mesSize = mes.length() * 2;
 		byte[] mesArray;
 		if(mesSize > 490){
-			String str = mes.substring(0, 490);
+			String str = mes.substring(0, 490/2);
 			mesArray = string2byte(str);
 			byte2byte(21, outBuf, mesArray);
 			return 21 + 490;
@@ -150,13 +150,13 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 //		byte2byte(25, outBuf, timeArray);
 		long time = sessionContent.getExpirationTimestamp().getTime();
 		byte[] timeArray = long2byte(time);
-		byte2byte(13, outBuf, timeArray);
+		byte2byte(25, outBuf, timeArray);
 
 		String mes = sessionContent.getMessage();
 		int mesSize = mes.length() * 2;
 		byte[] mesArray;
 		if(mesSize > 470){
-			String str = mes.substring(0, 470);
+			String str = mes.substring(0, 470/2);
 			mesArray = string2byte(str);
 			byte2byte(33, outBuf, mesArray);
 			return 33 + 470;
@@ -212,7 +212,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte2byte(0, outBuf, cid);
 
 		outBuf[4] = RPCOperationCode.SESSION_WRITE;
-		return outBuf.length;
+		return 5;
 	}
 
 	@Override
@@ -222,7 +222,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte2byte(0, outBuf, cid);
 
 		outBuf[4] = RPCOperationCode.GET_VIEW;
-		return outBuf.length;
+		return 5;
 	}
 
 
@@ -238,13 +238,15 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		Set<InetAddress> ip = view.getIpAddresses();
 		Iterator<InetAddress> iterator = ip.iterator();
 		int offset = 0;
+		int count = 0;
 		while(iterator.hasNext()){
+			count++;
 			InetAddress i = iterator.next();
 			byte[] temp = i.getAddress();
 			byte2byte(5 + offset, outBuf, temp);
 			offset += 4;
 		}
-		return outBuf.length;
+		return 5 + count * 4;
 	}
 
 

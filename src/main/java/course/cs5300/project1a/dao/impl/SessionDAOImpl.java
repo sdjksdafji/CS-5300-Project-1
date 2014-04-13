@@ -48,22 +48,33 @@ public class SessionDAOImpl implements SessionDAO {
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		long currentVersion = localSessionTableManager.getSession(sessionId).getVersion();
-		if(sessionContent.getVersion()>currentVersion)
-			localSessionTableManager.addSession(sessionContent);
+		for(InetAddress m : metadata){
+			rPCClientService.writeSession(m,sessionId, sessionContent);
+		}
 	}
 
 	@Override
 	public SessionContent getSession(SessionID sessionId,
 			List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		return localSessionTableManager.getSession(sessionId);
+		SessionContent localSession = localSessionTableManager.getSession(sessionId);
+		for(InetAddress m : metadata){
+			SessionContent temp = rPCClientService.readSession(m, sessionId, localSession.getVersion());
+			if(temp==null)	continue;
+			sessionId = localSessionTableManager.addSession(temp);
+			localSession = temp;
+		}
+		return localSession;
 	}
 
 	@Override
 	public void removeSession(SessionID sessionId, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		localSessionTableManager.removeSession(sessionId);
+		for(InetAddress m : metadata){
+			SessionContent sessionContent = new SessionContent();
+			sessionContent.setVersion(-1);
+			rPCClientService.writeSession(m,sessionId, sessionContent);
+		}
 	}
 
 }
