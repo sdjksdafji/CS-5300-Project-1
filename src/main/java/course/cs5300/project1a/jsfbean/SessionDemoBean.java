@@ -173,7 +173,8 @@ public class SessionDemoBean {
 		if (sessionContent == null) {
 			System.err
 					.println("serious error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			throw new NullPointerException();
+			sessionContent = new SessionContent();
+			//throw new NullPointerException();
 		}
 		this.sessionCookieService.updateSession(this.sessionId, response,
 				timestampOfThisRequest, versionOfThisRequest);
