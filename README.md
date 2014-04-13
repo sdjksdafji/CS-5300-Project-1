@@ -8,7 +8,7 @@ JSF
 
 Primefaces.
 
-Cookie format: key = "CS5300PROJ1SESSIONBYSW773" value = sessionId (including local session num + server ip) + "_" + version + "_" + expiration + "_"	+ metadata (includes 2 ip address in our case)
+Architecture:
 
 The whole project consists of five parts: Web Controller, SessionDAO, RPC, LocalSessionTable, and GOSSIP.
 
@@ -23,8 +23,13 @@ Local session table is the table which stores a hash map locally, mapping from s
 GOSSIP is the communication model in this project. All the file about GOSSIP protocol is under the pacakage "gossip". It basically does two things. In a fixed interval, which is 45s, it will choose a node randomly in its view and try to get the view of the remote node. In a random interval, which is in average 60s, it will update the bootstrap view in order to let new menber quickly catching up.
 
 
-local session table is a hash map of <key = sessionId (including local session num + server ip), value = message, version, expiration timestamp>
+local session table is a hash map of [key = sessionId (including local session num + server ip), value = message, version, expiration timestamp]
 
 
 The way I delete time-out session is to run a thread every 45 seconds. The thread go through the whole session table, compares every session content's expiration timestamp to the current time. If the timestamp is before the current time, it will be removed from session table.
 
+Format:
+
+Cookie format: key = "CS5300PROJ1SESSIONBYSW773" value = sessionId (including local session num + server ip) + "_" + version + "_" + expiration + "_"	+ metadata (includes 2 ip address in our case)
+
+RPC format: All rpc request and response are formatted in a single UDP packet. The details about the udp buffer is in the file "RPC format.pdf"
