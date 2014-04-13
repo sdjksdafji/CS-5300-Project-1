@@ -6,7 +6,7 @@ import javax.inject.Named;
 
 import course.cs5300.project1a.rpc.lib.service.CallIdService;
 
-//@Named
+@Named
 public class CallIdServiceImpl implements CallIdService {
 
 	private Random generator = new Random();
