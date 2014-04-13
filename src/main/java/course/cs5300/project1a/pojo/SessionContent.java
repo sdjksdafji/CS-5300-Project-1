@@ -60,4 +60,11 @@ public class SessionContent {
 		this.expirationTimestamp = expirationTimestamp;
 	}
 
+	@Override
+	public String toString() {
+		return "SessionContent [message=" + message + ", version=" + version
+				+ ", expirationTimestamp=" + expirationTimestamp.toString()
+				+ "]";
+	}
+
 }

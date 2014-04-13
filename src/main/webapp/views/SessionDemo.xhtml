@@ -51,6 +51,11 @@
 			itemType="disc">
 	#{ip}
 </p:dataList>
+		<h:outputLabel value="Local Session Table: " />
+		<p:dataList value="#{serverInfoBean.localTableInfo}" var="pair"
+			itemType="disc">
+	#{pair}
+</p:dataList>
 	</p:panelGrid>
 
 </h:body>
