@@ -18,6 +18,7 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		/*
 		String command = "/opt/aws/bin/ec2-metadata --public-ipv4";
 		try {
 			Process a = Runtime.getRuntime().exec(command);
@@ -34,6 +35,7 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		return null;
 	}
 

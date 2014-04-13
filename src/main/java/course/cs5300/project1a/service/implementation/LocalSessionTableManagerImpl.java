@@ -29,7 +29,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Inject
 	private GetLocalIPService getLocalIpService;
 	@Override
-	public SessionID addSession(SessionContent sessionContent) {
+	public synchronized SessionID addSession(SessionContent sessionContent) {
 		// TODO Auto-generated method stub
 		long sessionNumber = Math.max(sessionContent.getVersion(), currentSessionId);
 		currentSessionId = sessionNumber+1;
@@ -49,7 +49,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	public void updateSession(SessionID sessionId, SessionContent sessionContent) {
+	public synchronized void updateSession(SessionID sessionId, SessionContent sessionContent) {
 		// TODO Auto-generated method stub
 		if(sessionContent.getVersion()==-1){
 			removeSession(sessionId);
@@ -64,20 +64,20 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	public SessionContent getSession(SessionID sessionId) {
+	public synchronized SessionContent getSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
 		return sessionMap.get(sessionId);
 	}
 
 	@Override
-	public void removeSession(SessionID sessionId) {
+	public synchronized void removeSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
 		sessionMap.remove(sessionId);
 		
 	}
 
 	@Override
-	public void removeExpiredSession() {
+	public synchronized void removeExpiredSession() {
 		// TODO Auto-generated method stub
 		System.out.println("Removing Expired Session  <<-------------------------------------");
 		Timestamp currentTs = new Timestamp((new Date()).getTime());
@@ -95,7 +95,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	public void storeSessionLocally(SessionID sessionId,
+	public synchronized void storeSessionLocally(SessionID sessionId,
 			SessionContent sessionContent) {
 		// TODO Auto-generated method stub
 		updateSession(sessionId,sessionContent);
