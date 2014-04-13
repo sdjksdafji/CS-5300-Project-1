@@ -18,7 +18,9 @@ SessionDAO is the highest abstract data model; it is under package "dao". The pu
 
 RPC consists of two parts: server and client. All the source code about RPC Service is under the package "rpc". Each instance is a server of RPC as well as a client. The RPC client and server is built upon the classical server and client model using UDP protocol. Every request and response is encoded in a single UDP packet.
 
+Local session table is the table which stores a hash map locally, mapping from session id to session content. The class which implements these functionality is "service.LocalSessionTableManger".
 
+GOSSIP is the communication model in this project. All the file about GOSSIP protocol is under the pacakage "gossip". It basically does two things. In a fixed interval, which is 45s, it will choose a node randomly in its view and try to get the view of the remote node. In a random interval, which is in average 60s, it will update the bootstrap view in order to let new menber quickly catching up.
 
 
 local session table is a hash map of <key = sessionId (including local session num + server ip), value = message, version, expiration timestamp>
