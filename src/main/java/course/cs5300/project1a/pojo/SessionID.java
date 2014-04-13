@@ -57,7 +57,11 @@ public class SessionID {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "SessionID [sessionNumber=" + sessionNumber + ", serverID="
+				+ serverID.toString() + "]";
+	}
 
 }

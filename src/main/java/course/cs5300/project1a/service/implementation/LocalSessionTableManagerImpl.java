@@ -3,9 +3,11 @@ package course.cs5300.project1a.service.implementation;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -106,6 +108,15 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		updateSession(sessionId,sessionContent);
 	}
 	
-	
+	@Override
+	public List<String> getContentList(){
+		List<String> list = new ArrayList<String>();
+		   Iterator it = sessionMap.entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pairs = (Map.Entry)it.next();
+		        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
+		    }
+		return list;
+	}
 	
 }
