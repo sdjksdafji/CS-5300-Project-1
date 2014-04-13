@@ -4,7 +4,7 @@ import javax.inject.Named;
 
 import course.cs5300.project1a.rpc.lib.service.CallIdService;
 
-@Named
+//@Named
 public class CallIdServiceMock implements CallIdService {
 
 	@Override
