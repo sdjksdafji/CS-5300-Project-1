@@ -37,19 +37,19 @@ public class SessionDemoBean {
 	private long versionOfThisRequest;
 	private Timestamp timestampOfThisRequest;
 	private SessionID sessionId;
-	
+
 	@Inject
 	private BootstrapViewDAO bootstrapViewDAO;
 
 	@Inject
 	private GetLocalIPService getLocalIPService;
-	
+
 	@Inject
 	private SessionCookieService sessionCookieService;
 
 	@Inject
 	private LocalSessionTableManager localSessionTableManager;
-	
+
 	@Inject
 	private SessionDAO sessionDAO;
 
@@ -84,9 +84,10 @@ public class SessionDemoBean {
 		System.out
 				.println("getSessionMsg called<<--------------------------------------------");
 		// ----------------------------------------------
-//		this.sessionContent = this.sessionStateTableManager
-//				.getSession(null); // all null equals this.sessionId
-		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		// this.sessionContent = this.sessionStateTableManager
+		// .getSession(null); // all null equals this.sessionId
+		List<InetAddress> metadata = new ArrayList<InetAddress>(
+				bootstrapViewDAO.getBootstrapView().getIpAddresses());
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionMessage = this.sessionContent.getMessage();
@@ -113,9 +114,10 @@ public class SessionDemoBean {
 	}
 
 	public String getSessionExpireTime() {
-//		this.sessionContent = this.sessionStateTableManager
-//				.getSession(null);
-		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		// this.sessionContent = this.sessionStateTableManager
+		// .getSession(null);
+		List<InetAddress> metadata = new ArrayList<InetAddress>(
+				bootstrapViewDAO.getBootstrapView().getIpAddresses());
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionExpireTime = this.sessionContent
@@ -154,7 +156,7 @@ public class SessionDemoBean {
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
 		this.sessionCookieService.deleteSession(this.sessionId, this.response);
-		this.sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
+		this.sessionId = new SessionID(-1, getLocalIPService.getLocalIP());
 		this.sessionContent = null;
 		return "/views/SessionDemo.xhtml";
 	}
@@ -176,29 +178,19 @@ public class SessionDemoBean {
 	}
 
 	private void readSession() {
-//		sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
 		this.sessionId = this.sessionCookieService.getSessionId(request);
-//		this.sessionContent = this.sessionStateTableManager
-//				.getSession(null);
-//		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
-		List<InetAddress> metadata = new ArrayList<InetAddress>();
-		for(InetAddress ip:bootstrapViewDAO.getBootstrapView().getIpAddresses()){
-			metadata.add(ip);
-		}
-		System.out.println(metadata.get(0) instanceof InetAddress);
-		System.out.println(this.sessionId.getServerID().toString()+"lalalalalalala");
+		List<InetAddress> metadata = this.sessionCookieService
+				.getMetadata(request);
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (sessionContent == null) {
 			System.out
 					.println("session NOT found <<------------------------------------------");
-			this.sessionId = this.sessionCookieService
+			sessionContent = this.sessionCookieService
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
-//			this.sessionContent = this.sessionStateTableManager
-//					.getSession(null);
-			metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
-			this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		} else {
+			this.sessionCookieService.updateSession(this.sessionId, response,
+					timestampOfThisRequest, versionOfThisRequest);
 			System.out
 					.println("session found <<------------------------------------------");
 		}
@@ -206,10 +198,9 @@ public class SessionDemoBean {
 			System.err
 					.println("serious error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			sessionContent = new SessionContent();
-			//throw new NullPointerException();
+			// throw new NullPointerException();
 		}
-		this.sessionCookieService.updateSession(this.sessionId, response,
-				timestampOfThisRequest, versionOfThisRequest);
+
 	}
 
 }

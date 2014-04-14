@@ -31,8 +31,8 @@ import course.cs5300.project1a.dao.BootstrapViewDAO;
 import course.cs5300.project1a.pojo.*;
 import course.cs5300.project1a.rpc.client.service.RPCClientService;
 import course.cs5300.project1a.service.GetLocalIPService;
-@Named
-@Scope("singleton")
+//@Named
+//@Scope("singleton")
 public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 	View view;
 	private static AmazonSimpleDBClient client;
@@ -116,7 +116,7 @@ public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 		List<InetAddress> resultList = new ArrayList<InetAddress>();
 		for(String ip:temp){
 			try {
-				resultList.add(InetAddress.getByName(ip.substring(1)));
+				resultList.add(InetAddress.getByName(this.getLocalIpService.moveFirstSlash(ip)));
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
