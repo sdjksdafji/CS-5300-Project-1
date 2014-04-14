@@ -47,6 +47,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	public SessionID createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
+		System.out.println(currentTimestamp.getTime());
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 				+ cookieExpirationTimeInSec * 1000);
 		SessionContent sessionContent = new SessionContent("Good User",
@@ -64,6 +65,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 //		SessionContent sessionContent = this.localSessionTableManager
 //				.getSession(sessionId);
 		if (sessionContent != null) {
+			System.out.println(currentTimestamp.getTime());
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
