@@ -23,28 +23,29 @@ import course.cs5300.project1a.pojo.SessionID;
 import course.cs5300.project1a.service.GetLocalIPService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.service.*;
+
 @Named
 @Scope("singleton")
 public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	private static Map<SessionID, SessionContent> sessionMap = new HashMap<SessionID, SessionContent>();
 	private static long currentSessionId = 0;
-	private final long cookieExpirationTimeInSec=30;
+	private final long cookieExpirationTimeInSec = 30;
 	@Inject
 	private GetLocalIPService getLocalIpService;
+
 	@Override
 	public synchronized SessionID addSession(SessionContent sessionContent) {
 		// TODO Auto-generated method stub
-		long sessionNumber = Math.max(sessionContent.getVersion(), currentSessionId);
-		currentSessionId = sessionNumber+1;
+		long sessionNumber = Math.max(sessionContent.getVersion(),
+				currentSessionId);
+		currentSessionId = sessionNumber + 1;
 		SessionID newSessionID = null;
 		try {
-			InetAddress addr = InetAddress.getByName(getLocalIpService.getLocalIP().toString().substring(1));
-			newSessionID = new SessionID(sessionNumber,addr);
-			sessionMap.put(newSessionID, (SessionContent) sessionContent.clone());
+			InetAddress addr = getLocalIpService.getLocalIP();
+			newSessionID = new SessionID(sessionNumber, addr);
+			sessionMap.put(newSessionID,
+					(SessionContent) sessionContent.clone());
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -52,15 +53,23 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	public synchronized void updateSession(SessionID sessionId, SessionContent sessionContent) {
+	public synchronized void updateSession(SessionID sessionId,
+			SessionContent sessionContent) {
 		// TODO Auto-generated method stub
-		if(sessionContent.getVersion()==-1){
+		if (sessionId == null || sessionContent == null)
+			return;
+		if (sessionContent.getVersion() == -1) {
 			removeSession(sessionId);
 			return;
 		}
 		try {
-			if(sessionMap.get(sessionId).getVersion()<=sessionContent.getVersion())
-				sessionMap.put(sessionId, (SessionContent) sessionContent.clone());
+			SessionContent ownCopyOfSessionContent = sessionMap.get(sessionId);
+			if (ownCopyOfSessionContent == null)
+				return;
+			if (sessionMap.get(sessionId).getVersion() <= sessionContent
+					.getVersion())
+				sessionMap.put(sessionId,
+						(SessionContent) sessionContent.clone());
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,21 +79,24 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public synchronized SessionContent getSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
-//		SessionContent sc = new SessionContent();
-//		sc.setExpirationTimestamp(currentTimestamp.getTime() + cookieExpirationTimeInSec * 1000);
-//		sc.setMessage("Hello World");
-//		sc.setVersion(0);
-//		sessionMap.put(sessionId, sc);
+		// SessionContent sc = new SessionContent();
+		// sc.setExpirationTimestamp(currentTimestamp.getTime() +
+		// cookieExpirationTimeInSec * 1000);
+		// sc.setMessage("Hello World");
+		// sc.setVersion(0);
+		// sessionMap.put(sessionId, sc);
 		SessionContent c = sessionMap.get(sessionId);
-		if(c==null){
+		if (c == null) {
 			c = new SessionContent();
 			c.setMessage("Hello User");
 			c.setVersion(0);
 			Timestamp currentTs = new Timestamp((new Date()).getTime());
-			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()+cookieExpirationTimeInSec*1000);
+			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()
+					+ cookieExpirationTimeInSec * 1000);
 			c.setExpirationTimestamp(expirationTimestamp);
 			sessionMap.put(sessionId, c);
-			System.out.println(sessionId+" is added, Message:"+c.getMessage());
+			System.out.println(sessionId + " is added, Message:"
+					+ c.getMessage());
 		}
 		return c;
 	}
@@ -93,21 +105,30 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	public synchronized void removeSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
 		sessionMap.remove(sessionId);
-		
+
 	}
 
 	@Override
 	public synchronized void removeExpiredSession() {
 		// TODO Auto-generated method stub
-		System.out.println("Removing Expired Session  <<-------------------------------------");
+		System.out
+				.println("Removing Expired Session  <<-------------------------------------");
 		Timestamp currentTs = new Timestamp((new Date()).getTime());
-		Iterator<Entry<SessionID, SessionContent>> iter = this.sessionMap.entrySet().iterator();
-		while(iter.hasNext()){
+		Iterator<Entry<SessionID, SessionContent>> iter = this.sessionMap
+				.entrySet().iterator();
+		while (iter.hasNext()) {
 			Entry<SessionID, SessionContent> entry = iter.next();
 			SessionContent sessionContent = entry.getValue();
-			if(sessionContent.getExpirationTimestamp().before(currentTs)){
+			if (sessionContent.getExpirationTimestamp().before(currentTs)) {
 				// ---------------------------------------------------
-				System.out.println(entry.getKey() + "Expire Time" + entry.getValue().getExpirationTimestamp().toString() + " current time " + currentTs.toString() + " removed from session table <<------------------------------");
+				System.out
+						.println(entry.getKey()
+								+ "Expire Time"
+								+ entry.getValue().getExpirationTimestamp()
+										.toString()
+								+ " current time "
+								+ currentTs.toString()
+								+ " removed from session table <<------------------------------");
 				// ---------------------------------------------------
 				iter.remove();
 			}
@@ -118,24 +139,27 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	public synchronized void storeSessionLocally(SessionID sessionId,
 			SessionContent sessionContent) {
 		// TODO Auto-generated method stub
-		updateSession(sessionId,sessionContent);
+		updateSession(sessionId, sessionContent);
 	}
-	
+
 	@Override
-	public List<String> getContentList(){
+	public List<String> getContentList() {
 		List<String> list = new ArrayList<String>();
-		   Iterator it = sessionMap.entrySet().iterator();
-		    while (it.hasNext()) {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        if(pairs!=null){
-		        	System.out.println(pairs.getKey()+"What????????");
-		        	System.out.println(pairs.getValue()+"What????????");
-		        }
-		        System.out.println(((SessionID)pairs.getKey()).toString()+"++++++++++++++++++++++++++++");
-		        System.out.println(((SessionContent)pairs.getValue()).toString()+"-----------------------");
-		        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
-		    }
+		Iterator it = sessionMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			if (pairs != null) {
+				System.out.println(pairs.getKey() + "What????????");
+				System.out.println(pairs.getValue() + "What????????");
+			}
+			System.out.println(((SessionID) pairs.getKey()).toString()
+					+ "++++++++++++++++++++++++++++");
+			System.out.println(((SessionContent) pairs.getValue()).toString()
+					+ "-----------------------");
+			list.add(((SessionID) pairs.getKey()).toString() + " = "
+					+ ((SessionContent) pairs.getValue()).toString());
+		}
 		return list;
 	}
-	
+
 }

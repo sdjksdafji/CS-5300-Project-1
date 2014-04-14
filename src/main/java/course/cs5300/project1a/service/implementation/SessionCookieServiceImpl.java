@@ -64,6 +64,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		InetAddress secondaryServer = this.gossipService.choose();
 		if (secondaryServer == null) {
 			System.err.println("Serious error, gossip returns null address");
+			metadata.add(this.getLocalIPService.getLocalIP());
 		} else {
 			metadata.add(secondaryServer);
 		}
@@ -93,7 +94,8 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			sessionDAO.updateSession(sessionId, sessionContent, metadata);
 			// this.localSessionTableManager.updateSession(sessionId,
 			// sessionContent);
-			this.writeSessionInfoToCookie(response, sessionId, version, 0, metadata);
+			this.writeSessionInfoToCookie(response, sessionId, version, 0,
+					metadata);
 		}
 	}
 
@@ -128,14 +130,14 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
-			scanner.next();
 			System.out.println(cookieVal);
-			long sessionNum = Long.valueOf((scanner.next()));
 			String serverIpStr = scanner.next();
+			long sessionNum = Long.valueOf((scanner.next()));
 			scanner.close();
 			InetAddress serverId = null;
 			try {
-				serverId = InetAddress.getByName(serverIpStr);
+				serverId = InetAddress.getByName(this.getLocalIPService
+						.moveFirstSlash(serverIpStr));
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -144,6 +146,38 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			SessionID sessionId = new SessionID(sessionNum, serverId);
 
 			return sessionId;
+		}
+		return null;
+	}
+
+	@Override
+	public List<InetAddress> getMetadata(HttpServletRequest request) {
+		String cookieVal = this.getCookieVal(request);
+		if (cookieVal != null) {
+			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
+			for (int i = 0; i < 3; i++) {
+				scanner.next();
+			}
+			String primaryIpStr = scanner.next();
+			String secondaryIpStr = scanner.next();
+			scanner.close();
+			InetAddress primaryIp = null;
+			InetAddress secondaryIp = null;
+			try {
+				primaryIp = InetAddress.getByName(this.getLocalIPService
+						.moveFirstSlash(primaryIpStr));
+				secondaryIp = InetAddress.getByName(this.getLocalIPService
+						.moveFirstSlash(secondaryIpStr));
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			List<InetAddress> metadata = new ArrayList<InetAddress>();
+			metadata.add(primaryIp);
+			metadata.add(secondaryIp);
+
+			return metadata;
 		}
 		return null;
 	}

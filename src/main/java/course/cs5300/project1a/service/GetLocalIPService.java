@@ -4,4 +4,6 @@ import java.net.InetAddress;
 
 public interface GetLocalIPService {
 	public InetAddress getLocalIP();
+
+	public String moveFirstSlash(String ip);
 }

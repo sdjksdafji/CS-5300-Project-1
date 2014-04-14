@@ -116,7 +116,7 @@ public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 		List<InetAddress> resultList = new ArrayList<InetAddress>();
 		for(String ip:temp){
 			try {
-				resultList.add(InetAddress.getByName(ip.substring(1)));
+				resultList.add(InetAddress.getByName(this.getLocalIpService.moveFirstSlash(ip)));
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

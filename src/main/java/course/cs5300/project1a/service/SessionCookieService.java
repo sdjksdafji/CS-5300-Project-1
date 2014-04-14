@@ -1,6 +1,8 @@
 package course.cs5300.project1a.service;
 
+import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,8 @@ public interface SessionCookieService {
 	public void deleteSession(SessionID sessionId, HttpServletResponse response);
 
 	public SessionID getSessionId(HttpServletRequest request);
+	
+	public List<InetAddress> getMetadata(HttpServletRequest request);
 
 	public String getCookieVal(HttpServletRequest request);
 	

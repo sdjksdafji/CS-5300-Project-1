@@ -72,6 +72,8 @@ public class SessionDAOImpl implements SessionDAO {
 	public SessionContent getSession(SessionID sessionId,
 			List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
+		if (sessionId == null || metadata == null)
+			return null;
 		SessionContent localSession = localSessionTableManager
 				.getSession(sessionId);
 		for (InetAddress m : metadata) {
