@@ -176,11 +176,7 @@ public class SessionDemoBean {
 	}
 
 	private void readSession() {
-//		sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
 		this.sessionId = this.sessionCookieService.getSessionId(request);
-//		this.sessionContent = this.sessionStateTableManager
-//				.getSession(null);
-//		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
 		List<InetAddress> metadata = new ArrayList<InetAddress>();
 		for(InetAddress ip:bootstrapViewDAO.getBootstrapView().getIpAddresses()){
 			metadata.add(ip);
