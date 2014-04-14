@@ -31,8 +31,8 @@ import course.cs5300.project1a.dao.BootstrapViewDAO;
 import course.cs5300.project1a.pojo.*;
 import course.cs5300.project1a.rpc.client.service.RPCClientService;
 import course.cs5300.project1a.service.GetLocalIPService;
-@Named
-@Scope("singleton")
+//@Named
+//@Scope("singleton")
 public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 	View view;
 	private static AmazonSimpleDBClient client;

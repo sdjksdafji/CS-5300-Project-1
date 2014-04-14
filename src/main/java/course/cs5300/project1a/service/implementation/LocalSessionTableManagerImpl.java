@@ -31,8 +31,6 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	private final long cookieExpirationTimeInSec=30;
 	@Inject
 	private GetLocalIPService getLocalIpService;
-	@Inject
-	private SessionCookieService sessionCookieService;
 	@Override
 	public synchronized SessionID addSession(SessionContent sessionContent) {
 		// TODO Auto-generated method stub

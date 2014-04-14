@@ -1,6 +1,5 @@
 package course.cs5300.project1a.dao.impl;
 
-
 import java.io.IOException;
 import java.net.*;
 import java.util.List;
@@ -8,7 +7,9 @@ import java.util.Vector;
 
 import course.cs5300.project1a.rpc.lib.RPCOperationCode;
 import course.cs5300.project1a.rpc.lib.service.*;
+import course.cs5300.project1a.service.GetLocalIPService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
+import course.cs5300.project1a.service.SessionNumberManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,27 +21,41 @@ import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
 import course.cs5300.project1a.rpc.client.service.RPCClientService;
 import course.cs5300.project1a.service.implementation.LocalSessionTableManagerImpl;
+
 @Named
 @Scope("singleton")
 public class SessionDAOImpl implements SessionDAO {
 	@Inject
 	private LocalSessionTableManager localSessionTableManager;
 	@Inject
+	private SessionNumberManager sessionNumberManager;
+	@Inject
+	private GetLocalIPService getLocalIpService;
+	@Inject
 	private RPCClientService rPCClientService;
-	public static final int MAX_UDP_PKT_SIZE = 512;	//Bytes
+	public static final int MAX_UDP_PKT_SIZE = 512; // Bytes
+
 	@Override
 	public SessionID addSession(SessionContent sessionContent,
 			List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		SessionID sessionId = localSessionTableManager.addSession(sessionContent);
-		
-		for(InetAddress m : metadata){
-			SessionContent temp = rPCClientService.readSession(m, sessionId, sessionContent.getVersion());
-			if(temp==null)	continue;
-			sessionId = localSessionTableManager.addSession(temp);
-			sessionContent = temp;
+		SessionID sessionId = new SessionID(
+				this.sessionNumberManager.getSessionNum(),
+				this.getLocalIpService.getLocalIP());
+
+		boolean isStoredAtLeastOnce = false;
+
+		for (InetAddress ip : metadata) {
+			if (ip == null) {
+				continue;
+			}
+			isStoredAtLeastOnce = isStoredAtLeastOnce
+					|| this.rPCClientService.writeSession(ip, sessionId,
+							sessionContent);
 		}
-		
+		if (!isStoredAtLeastOnce) {
+			System.err.println("Serious Error, not stored on server");
+		}
 		return sessionId;
 	}
 
@@ -48,8 +63,8 @@ public class SessionDAOImpl implements SessionDAO {
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		for(InetAddress m : metadata){
-			rPCClientService.writeSession(m,sessionId, sessionContent);
+		for (InetAddress m : metadata) {
+			rPCClientService.writeSession(m, sessionId, sessionContent);
 		}
 	}
 
@@ -57,10 +72,13 @@ public class SessionDAOImpl implements SessionDAO {
 	public SessionContent getSession(SessionID sessionId,
 			List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		SessionContent localSession = localSessionTableManager.getSession(sessionId);
-		for(InetAddress m : metadata){
-			SessionContent temp = rPCClientService.readSession(m, sessionId, localSession.getVersion());
-			if(temp==null)	continue;
+		SessionContent localSession = localSessionTableManager
+				.getSession(sessionId);
+		for (InetAddress m : metadata) {
+			SessionContent temp = rPCClientService.readSession(m, sessionId,
+					localSession.getVersion());
+			if (temp == null)
+				continue;
 			sessionId = localSessionTableManager.addSession(temp);
 			localSession = temp;
 		}
@@ -70,10 +88,10 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public void removeSession(SessionID sessionId, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
-		for(InetAddress m : metadata){
+		for (InetAddress m : metadata) {
 			SessionContent sessionContent = new SessionContent();
 			sessionContent.setVersion(-1);
-			rPCClientService.writeSession(m,sessionId, sessionContent);
+			rPCClientService.writeSession(m, sessionId, sessionContent);
 		}
 	}
 

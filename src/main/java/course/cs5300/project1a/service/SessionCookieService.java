@@ -10,7 +10,7 @@ import course.cs5300.project1a.pojo.SessionID;
 
 public interface SessionCookieService {
 
-	public SessionID createSession(HttpServletResponse response,
+	public SessionContent createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
 
 	public void updateSession(SessionID sessionId, HttpServletResponse response,
