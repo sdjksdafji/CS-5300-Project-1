@@ -144,7 +144,6 @@ public class SessionDemoBean {
 		// ----------------------------------------------
 		System.out
 				.println("refresh clicked<<--------------------------------------------");
-		this.sessionMessage = "Why?????";
 		// ----------------------------------------------
 		return "/views/SessionDemo.xhtml";
 	}

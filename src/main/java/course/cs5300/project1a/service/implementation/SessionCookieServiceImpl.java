@@ -1,7 +1,10 @@
 package course.cs5300.project1a.service.implementation;
 
+import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.inject.Inject;
@@ -19,6 +22,7 @@ import course.cs5300.project1a.service.SessionCookieService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.pojo.SessionID;
 import course.cs5300.project1a.service.*;
+import course.cs5300.project1a.dao.*;
 
 @Named
 public class SessionCookieServiceImpl implements SessionCookieService {
@@ -28,10 +32,16 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
+	private BootstrapViewDAO bootstrapViewDAO;
+	
+	@Inject
 	private GetLocalIPService getLocalIPService;
 	
 	@Inject
 	private LocalSessionTableManager localSessionTableManager;
+	
+	@Inject
+	private SessionDAO sessionDAO;
 
 	@Override
 	public SessionID createSession(HttpServletResponse response,
@@ -49,34 +59,42 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	public void updateSession(SessionID sessionId, HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
-		SessionContent sessionContent = this.localSessionTableManager
-				.getSession(sessionId);
+		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		SessionContent sessionContent = sessionDAO.getSession(sessionId, metadata);
+//		SessionContent sessionContent = this.localSessionTableManager
+//				.getSession(sessionId);
 		if (sessionContent != null) {
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
 			sessionContent.setVersion(version);
-			this.localSessionTableManager.updateSession(sessionId,
-					sessionContent);
+			sessionDAO.updateSession(sessionId, sessionContent, metadata);
+//			this.localSessionTableManager.updateSession(sessionId,
+//					sessionContent);
 			this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
 		}
 	}
 
 	@Override
 	public void updateSessionMessage(SessionID sessionId, String message) {
-		SessionContent sessionContent = this.localSessionTableManager
-				.getSession(sessionId); // null = sessionId
+		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		SessionContent sessionContent = sessionDAO.getSession(sessionId, metadata);
+//		SessionContent sessionContent = this.localSessionTableManager
+//				.getSession(sessionId); // null = sessionId
 		if (sessionContent != null) {
 			sessionContent.setMessage(message);
-			this.localSessionTableManager.updateSession(sessionId,
-					sessionContent);
+			sessionDAO.updateSession(sessionId, sessionContent, metadata);
+//			this.localSessionTableManager.updateSession(sessionId,
+//					sessionContent);
 		}
 	}
 	
 	@Override
 	public void deleteSession(SessionID sessionId, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		this.localSessionTableManager.removeSession(sessionId);
+		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		sessionDAO.removeSession(sessionId, metadata);
+//		this.localSessionTableManager.removeSession(sessionId);
 		removeCookie(response);
 	}
 

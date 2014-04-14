@@ -61,7 +61,8 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			return;
 		}
 		try {
-			sessionMap.put(sessionId, (SessionContent) sessionContent.clone());
+			if(sessionMap.get(sessionId).getVersion()<=sessionContent.getVersion())
+				sessionMap.put(sessionId, (SessionContent) sessionContent.clone());
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,9 +82,8 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			c = new SessionContent();
 			c.setMessage("Hello User");
 			c.setVersion(0);
-			java.util.Date date = new java.util.Date();
-			Timestamp currentTimestamp = new Timestamp(date.getTime());
-			Timestamp expirationTimestamp = new Timestamp(currentTimestamp.getTime()+cookieExpirationTimeInSec*1000);
+			Timestamp currentTs = new Timestamp((new Date()).getTime());
+			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()+cookieExpirationTimeInSec*1000);
 			c.setExpirationTimestamp(expirationTimestamp);
 			sessionMap.put(sessionId, c);
 			System.out.println(sessionId+" is added, Message:"+c.getMessage());
