@@ -129,12 +129,6 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		   Iterator it = sessionMap.entrySet().iterator();
 		    while (it.hasNext()) {
 		        Map.Entry pairs = (Map.Entry)it.next();
-		        if(pairs!=null){
-		        	System.out.println(pairs.getKey()+"What????????");
-		        	System.out.println(pairs.getValue()+"What????????");
-		        }
-		        System.out.println(((SessionID)pairs.getKey()).toString()+"++++++++++++++++++++++++++++");
-		        System.out.println(((SessionContent)pairs.getValue()).toString()+"-----------------------");
 		        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
 		    }
 		return list;
