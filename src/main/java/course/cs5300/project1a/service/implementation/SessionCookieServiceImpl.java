@@ -31,7 +31,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private GetLocalIPService getLocalIPService;
 	
 	@Inject
-	private LocalSessionTableManager sessionStateTableManager;
+	private LocalSessionTableManager localSessionTableManager;
 
 	@Override
 	public SessionID createSession(HttpServletResponse response,
@@ -39,41 +39,44 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		// TODO Auto-generated method stub
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 				+ cookieExpirationTimeInSec * 1000);
-		SessionContent sessionContent = new SessionContent("Hello User",
+		SessionContent sessionContent = new SessionContent("Good User",
 				version, expirationTS);
 		SessionID sessionId =  new SessionID(-1,getLocalIPService.getLocalIP());//this.sessionStateTableManager.addSession(sessionContent);
 		return sessionId;
 	}
 
-	public void updateSession(long sessionId, HttpServletResponse response,
+	@Override
+	public void updateSession(SessionID sessionId, HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
-		SessionContent sessionContent = this.sessionStateTableManager
-				.getSession(null);
+		SessionContent sessionContent = this.localSessionTableManager
+				.getSession(sessionId);
 		if (sessionContent != null) {
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
 			sessionContent.setVersion(version);
-			this.sessionStateTableManager.updateSession(null,
+			this.localSessionTableManager.updateSession(sessionId,
 					sessionContent);
 			this.writeSessionInfoToCookie(response, sessionId, version, 0, 0);
 		}
 	}
 
+	@Override
 	public void updateSessionMessage(SessionID sessionId, String message) {
-		SessionContent sessionContent = this.sessionStateTableManager
-				.getSession(null); // null = sessionId
+		SessionContent sessionContent = this.localSessionTableManager
+				.getSession(sessionId); // null = sessionId
 		if (sessionContent != null) {
 			sessionContent.setMessage(message);
-			this.sessionStateTableManager.updateSession(null,
+			this.localSessionTableManager.updateSession(sessionId,
 					sessionContent);
 		}
 	}
-
-	public void deleteSession(long sessionId, HttpServletResponse response) {
+	
+	@Override
+	public void deleteSession(SessionID sessionId, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		this.sessionStateTableManager.removeSession(null);
+		this.localSessionTableManager.removeSession(sessionId);
 		removeCookie(response);
 	}
 
@@ -82,8 +85,11 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
+			scanner.next();
 			System.out.println(cookieVal);
-			SessionID sessionId = new SessionID(scanner.nextLong(),getLocalIPService.getLocalIP());
+			long sessionNum = Long.valueOf((scanner.next()));
+			System.out.println(sessionNum);
+			SessionID sessionId = new SessionID(sessionNum,getLocalIPService.getLocalIP());
 			scanner.close();
 			return sessionId;
 		}
@@ -106,8 +112,8 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	}
 
 	private void writeSessionInfoToCookie(HttpServletResponse response,
-			long sessionId, long version, long expiration, long metadata) {
-		String cookieValue = sessionId + "_" + version + "_" + expiration + "_"
+			SessionID sessionId, long version, long expiration, long metadata) {
+		String cookieValue = sessionId.getServerID() + "_" + version + "_" + expiration + "_"
 				+ metadata;
 		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
 		cookie.setMaxAge((int) cookieExpirationTimeInSec);
@@ -126,25 +132,6 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		// ---------------------------------------------------
 		System.out.println("cookie removed <<------------------------------");
 		// ---------------------------------------------------
-	}
-
-	public void updateSessionMessage(long sessionId, String message) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateSession(SessionID sessionId,
-			HttpServletResponse response, Timestamp currentTimestamp,
-			long version) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteSession(SessionID sessionId, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -2,6 +2,7 @@ package course.cs5300.project1a.jsfbean;
 
 import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.*;
 
 import course.cs5300.project1a.pojo.SessionID;
 
@@ -21,7 +22,7 @@ import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.service.SessionCookieService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.service.VersionManager;
-import course.cs5300.project1a.dao.*;;
+import course.cs5300.project1a.dao.*;
 
 @Named
 @Scope("request")
@@ -36,6 +37,9 @@ public class SessionDemoBean {
 	private long versionOfThisRequest;
 	private Timestamp timestampOfThisRequest;
 	private SessionID sessionId;
+	
+	@Inject
+	private BootstrapViewDAO bootstrapViewDAO;
 
 	@Inject
 	private GetLocalIPService getLocalIPService;
@@ -44,7 +48,7 @@ public class SessionDemoBean {
 	private SessionCookieService sessionCookieService;
 
 	@Inject
-	private LocalSessionTableManager sessionStateTableManager;
+	private LocalSessionTableManager localSessionTableManager;
 	
 	@Inject
 	private SessionDAO sessionDAO;
@@ -80,8 +84,10 @@ public class SessionDemoBean {
 		System.out
 				.println("getSessionMsg called<<--------------------------------------------");
 		// ----------------------------------------------
-		this.sessionContent = this.sessionStateTableManager
-				.getSession(null); // all null equals this.sessionId
+//		this.sessionContent = this.sessionStateTableManager
+//				.getSession(null); // all null equals this.sessionId
+		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionMessage = this.sessionContent.getMessage();
 		} else {
@@ -107,8 +113,10 @@ public class SessionDemoBean {
 	}
 
 	public String getSessionExpireTime() {
-		this.sessionContent = this.sessionStateTableManager
-				.getSession(null);
+//		this.sessionContent = this.sessionStateTableManager
+//				.getSession(null);
+		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionExpireTime = this.sessionContent
 					.getExpirationTimestamp().toString();
@@ -124,8 +132,10 @@ public class SessionDemoBean {
 
 	public String replace() {
 		if (this.userInput != null) {
-			this.sessionCookieService.updateSessionMessage(sessionId,
+			this.sessionCookieService.updateSessionMessage(this.sessionId,
 					this.userInput);
+			this.sessionMessage = this.userInput;
+			System.out.println(this.userInput);
 		}
 		return "/views/SessionDemo.xhtml";
 	}
@@ -134,7 +144,7 @@ public class SessionDemoBean {
 		// ----------------------------------------------
 		System.out
 				.println("refresh clicked<<--------------------------------------------");
-		
+		this.sessionMessage = "Why?????";
 		// ----------------------------------------------
 		return "/views/SessionDemo.xhtml";
 	}
@@ -167,18 +177,28 @@ public class SessionDemoBean {
 	}
 
 	private void readSession() {
-		sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
+//		sessionId = new SessionID(-1,getLocalIPService.getLocalIP());
 		this.sessionId = this.sessionCookieService.getSessionId(request);
-		this.sessionContent = this.sessionStateTableManager
-				.getSession(null);
+//		this.sessionContent = this.sessionStateTableManager
+//				.getSession(null);
+//		List<InetAddress> metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		List<InetAddress> metadata = new ArrayList<InetAddress>();
+		for(InetAddress ip:bootstrapViewDAO.getBootstrapView().getIpAddresses()){
+			metadata.add(ip);
+		}
+		System.out.println(metadata.get(0) instanceof InetAddress);
+		System.out.println(this.sessionId.getServerID().toString()+"lalalalalalala");
+		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (sessionContent == null) {
 			System.out
 					.println("session NOT found <<------------------------------------------");
 			this.sessionId = this.sessionCookieService
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
-			this.sessionContent = this.sessionStateTableManager
-					.getSession(null);
+//			this.sessionContent = this.sessionStateTableManager
+//					.getSession(null);
+			metadata = new ArrayList<InetAddress>(bootstrapViewDAO.getBootstrapView().getIpAddresses());
+			this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		} else {
 			System.out
 					.println("session found <<------------------------------------------");
