@@ -180,13 +180,8 @@ public class SessionDemoBean {
 
 	private void readSession() {
 		this.sessionId = this.sessionCookieService.getSessionId(request);
-<<<<<<< HEAD
-//		if(sessionId!=null) System.out.println("Check before: "+sessionId.getSessionNumber());
-		List<InetAddress> metadata = this.sessionCookieService
-				.getMetadata(request);
-=======
+//		if(sessionId!=null) System.out.println("Check before: "+this.versionOfThisRequest);
 		this.metadata = this.sessionCookieService.getMetadata(request);
->>>>>>> 6f5e41edbb557ee045ebc133e2ce1990b847dcd7
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (sessionContent == null) {
 			System.out
@@ -207,7 +202,7 @@ public class SessionDemoBean {
 			sessionContent = new SessionContent();
 			// throw new NullPointerException();
 		}
-//		if(sessionId!=null) System.out.println("Check after: "+sessionId.getSessionNumber());
+//		if(sessionId!=null) System.out.println("Check after: "+this.versionOfThisRequest);
 
 	}
 

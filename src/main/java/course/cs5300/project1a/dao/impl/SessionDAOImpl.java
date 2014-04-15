@@ -76,15 +76,14 @@ public class SessionDAOImpl implements SessionDAO {
 			return null;
 		SessionContent localSession = localSessionTableManager
 				.getSession(sessionId);
+		SessionContent returnedSessionContent = null;
 		for (InetAddress m : metadata) {
-			SessionContent temp = rPCClientService.readSession(m, sessionId,
+			returnedSessionContent = rPCClientService.readSession(m, sessionId,
 					localSession.getVersion());
-			if (temp == null)
-				continue;
-			localSessionTableManager.updateSession(sessionId, temp);
-			localSession = temp;
+			localSessionTableManager.updateSession(sessionId, localSession);
+			localSession = localSession;
 		}
-		return localSession;
+		return returnedSessionContent;
 	}
 
 	@Override
