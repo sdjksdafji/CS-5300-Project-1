@@ -86,10 +86,6 @@ public class SessionDemoBean {
 				.println("getSessionMsg called<<--------------------------------------------");
 		// ----------------------------------------------
 		// this.sessionContent = this.sessionStateTableManager
-		// .getSession(null); // all null equals this.sessionId
-		List<InetAddress> metadata = new ArrayList<InetAddress>(
-				bootstrapViewDAO.getBootstrapView().getIpAddresses());
-		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionMessage = this.sessionContent.getMessage();
 		} else {
@@ -117,9 +113,6 @@ public class SessionDemoBean {
 	public String getSessionExpireTime() {
 		// this.sessionContent = this.sessionStateTableManager
 		// .getSession(null);
-		List<InetAddress> metadata = new ArrayList<InetAddress>(
-				bootstrapViewDAO.getBootstrapView().getIpAddresses());
-		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (this.sessionContent != null) {
 			this.sessionExpireTime = this.sessionContent
 					.getExpirationTimestamp().toString();
