@@ -5,7 +5,7 @@ import javax.inject.Named;
 import course.cs5300.project1a.dao.BootstrapViewDAO;
 import course.cs5300.project1a.pojo.View;
 
-@Named
+//@Named
 public class BoostrapViewDAOMock implements BootstrapViewDAO {
 
 	@Override

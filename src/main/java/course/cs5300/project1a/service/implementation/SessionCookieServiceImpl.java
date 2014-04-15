@@ -94,7 +94,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			sessionDAO.updateSession(sessionId, sessionContent, metadata);
 		}else{
 			System.err.println("serious error !!!!!!!!!!!!");
-			throw new NullPointerException();
+			//throw new NullPointerException();
 		}
 	}
 
