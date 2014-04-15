@@ -128,6 +128,7 @@ public class SessionDemoBean {
 
 	public String replace() {
 		if (this.userInput != null) {
+			this.sessionContent.setVersion(this.versionManager.getVersionNumber());
 			this.sessionCookieService.updateSessionMessage(this.sessionId,
 					this.sessionContent, this.metadata, this.userInput);
 			this.sessionMessage = this.userInput;

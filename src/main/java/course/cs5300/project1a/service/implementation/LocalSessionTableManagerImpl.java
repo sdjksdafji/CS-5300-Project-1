@@ -69,9 +69,12 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			if (ownCopyOfSessionContent == null)
 				return;
 			if (ownCopyOfSessionContent.getVersion() < sessionContent
-					.getVersion())
+					.getVersion()){System.out.println("-----------------------> store content:"+sessionContent.toString()+"<-----------------------");
 				sessionMap.put(sessionId,
 						(SessionContent) sessionContent.clone());
+			}else{
+				System.out.println("session content ignored due to older version");
+			}
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

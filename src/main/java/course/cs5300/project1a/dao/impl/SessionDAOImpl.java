@@ -37,7 +37,7 @@ public class SessionDAOImpl implements SessionDAO {
 
 	@Override
 	public SessionID addSession(SessionContent sessionContent,
-			List<InetAddress> metadata) {System.out.println("-------------------> add session called <-------------");
+			List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
 		SessionID sessionId = new SessionID(
 				this.sessionNumberManager.getSessionNum(),
@@ -61,7 +61,7 @@ public class SessionDAOImpl implements SessionDAO {
 
 	@Override
 	public void updateSession(SessionID sessionId,
-			SessionContent sessionContent, List<InetAddress> metadata) {System.out.println("--------------------> update session for "+sessionId.toString() + "<---------------------");
+			SessionContent sessionContent, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
 		for (InetAddress m : metadata) {
 			rPCClientService.writeSession(m, sessionId, sessionContent);

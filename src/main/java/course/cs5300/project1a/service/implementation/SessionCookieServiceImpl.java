@@ -34,19 +34,11 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private static final long cookieExpirationTimeInSec = 30;
 
 	@Inject
-	private BootstrapViewDAO bootstrapViewDAO;
-
-	@Inject
 	private GetLocalIPService getLocalIPService;
 
-	@Inject
-	private LocalSessionTableManager localSessionTableManager;
 
 	@Inject
 	private SessionDAO sessionDAO;
-
-	@Inject
-	private SessionNumberManager sessionNumberManager;
 
 	@Inject
 	private GossipService gossipService;
@@ -95,7 +87,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	@Override
 	public void updateSessionMessage(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata,
-			String message) {
+			String message) { System.out.println("-------------------> update session message called for message:" + message +"-----------<");
 		if (sessionContent != null && sessionId != null && metadata != null
 				&& message != null) {
 			sessionContent.setMessage(message);
