@@ -151,8 +151,6 @@ public class SessionDemoBean {
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
 		this.sessionCookieService.deleteSession(this.sessionId,this.metadata, this.response);
-		this.sessionId = new SessionID(-1, getLocalIPService.getLocalIP());
-		this.sessionContent = null;
 		return "/views/SessionDemo.xhtml";
 	}
 

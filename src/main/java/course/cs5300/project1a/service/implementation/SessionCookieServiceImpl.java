@@ -107,7 +107,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		removeCookie(response);
 		}else{
 			System.err.println("serious error !!!!!!!!!!!!");
-			throw new NullPointerException();
+			//throw new NullPointerException();
 		}
 	}
 

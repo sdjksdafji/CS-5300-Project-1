@@ -18,4 +18,12 @@ public class VersionManagerImpl implements VersionManager {
 		return returnVal;
 	}
 
+	@Override
+	public synchronized void updateVersion(long kownVersion) {
+		if(kownVersion >= currentVersion){
+			currentVersion = kownVersion + 1;
+		}
+	}
+
+	
 }

@@ -16,6 +16,7 @@ import course.cs5300.project1a.pojo.View;
 import course.cs5300.project1a.rpc.lib.RPCOperationCode;
 import course.cs5300.project1a.rpc.lib.service.RPCBufferService;
 import course.cs5300.project1a.service.LocalSessionTableManager;
+import course.cs5300.project1a.service.VersionManager;
 
 @Named
 @Scope("prototype")
@@ -33,6 +34,9 @@ public class RPCServiceRunnable implements Runnable {
 
 	@Inject
 	private GossipService gossipService;
+	
+	@Inject
+	private VersionManager versionManager;
 
 	@Override
 	public void run() {
@@ -69,6 +73,7 @@ public class RPCServiceRunnable implements Runnable {
 			SessionContent sessionContent = this.rpcBufferService
 					.getSessionContentFromWriteSessionBuffer(inBuf,
 							inBuf.length);
+			this.versionManager.updateVersion(sessionContent.getVersion());
 			this.localSessionTableManager.storeSessionLocally(sessionId,
 					sessionContent);
 			replyPacktLength = this.rpcBufferService
