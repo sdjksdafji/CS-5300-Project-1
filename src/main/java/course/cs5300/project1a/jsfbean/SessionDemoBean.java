@@ -33,10 +33,11 @@ public class SessionDemoBean {
 
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private SessionID sessionId;
 	private SessionContent sessionContent;
 	private long versionOfThisRequest;
+	private List<InetAddress> metadata;
 	private Timestamp timestampOfThisRequest;
-	private SessionID sessionId;
 
 	@Inject
 	private BootstrapViewDAO bootstrapViewDAO;
@@ -135,7 +136,7 @@ public class SessionDemoBean {
 	public String replace() {
 		if (this.userInput != null) {
 			this.sessionCookieService.updateSessionMessage(this.sessionId,
-					this.userInput);
+					this.sessionContent, this.metadata, this.userInput);
 			this.sessionMessage = this.userInput;
 			System.out.println(this.userInput);
 		}
@@ -155,7 +156,7 @@ public class SessionDemoBean {
 		System.out
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
-		this.sessionCookieService.deleteSession(this.sessionId, this.response);
+		this.sessionCookieService.deleteSession(this.sessionId,this.metadata, this.response);
 		this.sessionId = new SessionID(-1, getLocalIPService.getLocalIP());
 		this.sessionContent = null;
 		return "/views/SessionDemo.xhtml";
@@ -179,9 +180,13 @@ public class SessionDemoBean {
 
 	private void readSession() {
 		this.sessionId = this.sessionCookieService.getSessionId(request);
+<<<<<<< HEAD
 //		if(sessionId!=null) System.out.println("Check before: "+sessionId.getSessionNumber());
 		List<InetAddress> metadata = this.sessionCookieService
 				.getMetadata(request);
+=======
+		this.metadata = this.sessionCookieService.getMetadata(request);
+>>>>>>> 6f5e41edbb557ee045ebc133e2ce1990b847dcd7
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (sessionContent == null) {
 			System.out
@@ -190,8 +195,9 @@ public class SessionDemoBean {
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
 		} else {
-			this.sessionCookieService.updateSession(this.sessionId, this.sessionContent, response,
-					timestampOfThisRequest, versionOfThisRequest, metadata);
+			this.sessionCookieService.updateSession(this.sessionId,
+					this.sessionContent, response, timestampOfThisRequest,
+					versionOfThisRequest, metadata);
 			System.out
 					.println("session found <<------------------------------------------");
 		}

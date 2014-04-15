@@ -32,7 +32,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte[] snum = long2byte(sessionId.getSessionNumber());
 		byte2byte(5, outBuf, snum);
 
-		byte[] sid = sessionId.getServerID().getAddress();  //  - Yaolin
+		byte[] sid = sessionId.getServerID().getAddress(); // - Yaolin
 		byte2byte(13, outBuf, sid);
 
 		byte[] vnum = long2byte(versionNumber);
@@ -69,8 +69,6 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		return byte2long(temp);
 	}
 
-
-
 	/** 2 */
 	@Override
 	public int sendRepleyOfReadSessionBuffer(byte[] outBuf, int callId,
@@ -86,9 +84,9 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte2byte(5, outBuf, verArray);
 
 		// timestamp -> long -> byte array
-//		String time = sessionContent.getExpirationTimestamp().toString();
-//		byte[] timeArray = string2byte(time, 8);
-//		byte2byte(13, outBuf, timeArray);
+		// String time = sessionContent.getExpirationTimestamp().toString();
+		// byte[] timeArray = string2byte(time, 8);
+		// byte2byte(13, outBuf, timeArray);
 		long time = sessionContent.getExpirationTimestamp().getTime();
 		byte[] timeArray = long2byte(time);
 		byte2byte(13, outBuf, timeArray);
@@ -96,13 +94,12 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		String mes = sessionContent.getMessage();
 		int mesSize = mes.length() * 2;
 		byte[] mesArray;
-		if(mesSize > 490){
-			String str = mes.substring(0, 490/2);
+		if (mesSize > 490) {
+			String str = mes.substring(0, 490 / 2);
 			mesArray = string2byte(str);
 			byte2byte(21, outBuf, mesArray);
 			return 21 + 490;
-		}
-		else{
+		} else {
 			mesArray = string2byte(mes);
 			byte2byte(21, outBuf, mesArray);
 			return 21 + mesSize;
@@ -110,14 +107,13 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 	}
 
-
 	@Override
 	public SessionContent getSessionContentFromReplyOfReadSessionBuffer(
 			byte[] inBuf, int bufferLength) {
 		// TODO Auto-generated method stub
 		byte[] temp = getByteArray(inBuf, 5, 8);
 		long version = byte2long(temp);
-//		Timestamp timestamp = Timestamp.valueOf(byte2string(inBuf, 13, 8));
+		// Timestamp timestamp = Timestamp.valueOf(byte2string(inBuf, 13, 8));
 		byte[] temp2 = getByteArray(inBuf, 13, 8);
 		long ts = byte2long(temp2);
 		Timestamp timestamp = new Timestamp(ts);
@@ -141,30 +137,32 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte[] snum = long2byte(sessionId.getSessionNumber());
 		byte2byte(5, outBuf, snum);
 
-		byte[] sid = sessionId.getServerID().getAddress();  //  - Yaolin
+		byte[] sid = sessionId.getServerID().getAddress(); // - Yaolin
 		byte2byte(13, outBuf, sid);
 
 		long ver = sessionContent.getVersion();
 		byte[] verArray = long2byte(ver);
 		byte2byte(17, outBuf, verArray);
 
-//		String time = sessionContent.getExpirationTimestamp().toString();
-//		byte[] timeArray = string2byte(time, 8);
-//		byte2byte(25, outBuf, timeArray);
-		long time = sessionContent.getExpirationTimestamp().getTime();
+		// String time = sessionContent.getExpirationTimestamp().toString();
+		// byte[] timeArray = string2byte(time, 8);
+		// byte2byte(25, outBuf, timeArray);
+		long time = Long.MAX_VALUE;
+		if (sessionContent.getExpirationTimestamp() != null) {
+			time = sessionContent.getExpirationTimestamp().getTime();
+		}
 		byte[] timeArray = long2byte(time);
 		byte2byte(25, outBuf, timeArray);
 
 		String mes = sessionContent.getMessage();
 		int mesSize = mes.length() * 2;
 		byte[] mesArray;
-		if(mesSize > 470){
-			String str = mes.substring(0, 470/2);
+		if (mesSize > 470) {
+			String str = mes.substring(0, 470 / 2);
 			mesArray = string2byte(str);
 			byte2byte(33, outBuf, mesArray);
 			return 33 + 470;
-		}
-		else{
+		} else {
 			mesArray = string2byte(mes);
 			byte2byte(33, outBuf, mesArray);
 			return 33 + mesSize;
@@ -197,7 +195,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		// TODO Auto-generated method stub
 		byte[] temp = getByteArray(inBuf, 17, 8);
 		long version = byte2long(temp);
-//		Timestamp timestamp = Timestamp.valueOf(byte2string(inBuf, 25, 8));
+		// Timestamp timestamp = Timestamp.valueOf(byte2string(inBuf, 25, 8));
 		byte[] temp2 = getByteArray(inBuf, 25, 8);
 		long ts = byte2long(temp2);
 		Timestamp timestamp = new Timestamp(ts);
@@ -228,7 +226,6 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		return 5;
 	}
 
-
 	@Override
 	public int sendReplyOfGetViewBuffer(byte[] outBuf, int callId, View view) {
 		// TODO Auto-generated method stub
@@ -237,12 +234,12 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 		outBuf[4] = RPCOperationCode.SESSION_WRITE;
 
-//		byte[] viewArray = new byte[508];
+		// byte[] viewArray = new byte[508];
 		Set<InetAddress> ip = view.getIpAddresses();
 		Iterator<InetAddress> iterator = ip.iterator();
 		int offset = 0;
 		int count = 0;
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			count++;
 			InetAddress i = iterator.next();
 			byte[] temp = i.getAddress();
@@ -252,8 +249,6 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		return 5 + count * 4;
 	}
 
-
-
 	@Override
 	public List<InetAddress> getViewFromReplyOfGetViewBuffer(byte[] inBuf,
 			int bufferLength) {
@@ -261,7 +256,7 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte[] ip = getByteArray(inBuf, 5, inBuf.length - 5);
 		List<InetAddress> res = new ArrayList<InetAddress>();
 		int i = 0;
-		while(i < ip.length){
+		while (i < ip.length) {
 			byte[] temp = getByteArray(ip, i, 4);
 			InetAddress tmp = null;
 			try {
@@ -270,11 +265,10 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(tmp == null){
+			if (tmp == null) {
 				i += 4;
 				continue;
-			}
-			else{
+			} else {
 				res.add(tmp);
 			}
 			i += 4;
@@ -297,15 +291,11 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		return buf[4];
 	}
 
-
-
-
-
 	/** helper functions start here */
 	/** add son array to the mom array at exact location */
 	public void byte2byte(int index, byte[] mom, byte[] son) {
 		int i = index;
-		for(byte j : son){
+		for (byte j : son) {
 			mom[i++] = j;
 		}
 	}
@@ -313,53 +303,51 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 	/** convert value to byte array */
 	public byte[] int2byte(int num) {
 		byte[] res = new byte[4];
-		res[0] = (byte)((num >> 24) & 0xFF);
-		res[1] = (byte)((num >> 16) & 0xFF);
-		res[2] = (byte)((num >> 8) & 0xFF);
-		res[3] = (byte)(num & 0xFF);
+		res[0] = (byte) ((num >> 24) & 0xFF);
+		res[1] = (byte) ((num >> 16) & 0xFF);
+		res[2] = (byte) ((num >> 8) & 0xFF);
+		res[3] = (byte) (num & 0xFF);
 		return res;
 	}
 
 	public byte[] long2byte(long num) {
 		byte[] res = new byte[8];
-		res[0] = (byte)((num >> 56) & 0xFF);
-		res[1] = (byte)((num >> 48) & 0xFF);
-		res[2] = (byte)((num >> 40) & 0xFF);
-		res[3] = (byte)((num >> 32) & 0xFF);
-		res[4] = (byte)((num >> 24) & 0xFF);
-		res[5] = (byte)((num >> 16) & 0xFF);
-		res[6] = (byte)((num >> 8) & 0xFF);
-		res[7] = (byte)(num & 0xFF);
+		res[0] = (byte) ((num >> 56) & 0xFF);
+		res[1] = (byte) ((num >> 48) & 0xFF);
+		res[2] = (byte) ((num >> 40) & 0xFF);
+		res[3] = (byte) ((num >> 32) & 0xFF);
+		res[4] = (byte) ((num >> 24) & 0xFF);
+		res[5] = (byte) ((num >> 16) & 0xFF);
+		res[6] = (byte) ((num >> 8) & 0xFF);
+		res[7] = (byte) (num & 0xFF);
 
 		return res;
 	}
 
-	public byte[] string2byte(String s) {  ////String -> char array -> byte array
-//		byte[] res = new byte[len];  // len is the length of the output byte array, limit the length
-//		char[] tmp = s.toCharArray();
+	public byte[] string2byte(String s) { // //String -> char array -> byte
+											// array
+	// byte[] res = new byte[len]; // len is the length of the output byte
+	// array, limit the length
+	// char[] tmp = s.toCharArray();
 		return s.getBytes();
-//		return res;
+		// return res;
 	}
 
-
-
-	/** get son byte array from mom array*/
+	/** get son byte array from mom array */
 	public byte[] getByteArray(byte[] mom, int index, int len) {
 		byte[] son = new byte[len];
-		for(int i = 0; i < len; i++){
+		for (int i = 0; i < len; i++) {
 			son[i] = mom[index + i];
 		}
 
 		return son;
 	}
 
-
-
 	/** convert byte array to value */
 	public int byte2int(byte[] input) {
 		int res = 0;
-		for(int i = 0; i < 4; i++){
-			int shift= (4 - 1 - i) * 8;
+		for (int i = 0; i < 4; i++) {
+			int shift = (4 - 1 - i) * 8;
 			res += (input[i] & 0x000000FF) << shift;
 		}
 		return res;
@@ -367,8 +355,8 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 	public long byte2long(byte[] input) {
 		long res = 0;
-		for(int i = 0; i < 8; i++){
-			int shift= (8 - 1 - i) * 8;
+		for (int i = 0; i < 8; i++) {
+			int shift = (8 - 1 - i) * 8;
 			res += (input[i] & 0x000000FF) << shift;
 		}
 
@@ -376,17 +364,15 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 	}
 
 	public String byte2string(byte[] input) {
-//		String res = "";
+		// String res = "";
 		return new String(input);
-//		return res;
+		// return res;
 	}
-
 
 	public int getString2byteSize(String mes) {
 		// TODO Auto-generated method stub
 		int size = mes.length();
 		return 2 * size;
 	}
-
 
 }

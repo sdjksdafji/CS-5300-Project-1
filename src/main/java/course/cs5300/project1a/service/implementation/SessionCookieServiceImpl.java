@@ -78,44 +78,45 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	@Override
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, HttpServletResponse response,
-			Timestamp currentTimestamp, long version,
-			List<InetAddress> metadata) {
-		if(sessionId == null || sessionContent == null || response == null||metadata ==null){
-			System.err.println("serious error !!!!!!!!!!!! check source code");
+			Timestamp currentTimestamp, long version, List<InetAddress> metadata) {
+		if (sessionId == null || sessionContent == null || response == null
+				|| metadata == null) {
+			System.err.println("serious error !!!!!!!!!!!!");
+			throw new NullPointerException();
 		}
-			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
-					+ cookieExpirationTimeInSec * 1000);
-			sessionContent.setExpirationTimestamp(expirationTS);
-			sessionContent.setVersion(version);
-			sessionDAO.updateSession(sessionId, sessionContent, metadata);
-			this.writeSessionInfoToCookie(response, sessionId, version, 0,
-					metadata);
+		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
+				+ cookieExpirationTimeInSec * 1000);
+		sessionContent.setExpirationTimestamp(expirationTS);
+		sessionContent.setVersion(version);
+		sessionDAO.updateSession(sessionId, sessionContent, metadata);
+		this.writeSessionInfoToCookie(response, sessionId, version, 0, metadata);
 	}
 
 	@Override
-	public void updateSessionMessage(SessionID sessionId, String message) {
-		List<InetAddress> metadata = new ArrayList<InetAddress>(
-				bootstrapViewDAO.getBootstrapView().getIpAddresses());
-		SessionContent sessionContent = sessionDAO.getSession(sessionId,
-				metadata);
-		// SessionContent sessionContent = this.localSessionTableManager
-		// .getSession(sessionId); // null = sessionId
-		if (sessionContent != null) {
+	public void updateSessionMessage(SessionID sessionId,
+			SessionContent sessionContent, List<InetAddress> metadata,
+			String message) {
+		if (sessionContent != null && sessionId != null && metadata != null
+				&& message != null) {
 			sessionContent.setMessage(message);
 			sessionDAO.updateSession(sessionId, sessionContent, metadata);
-			// this.localSessionTableManager.updateSession(sessionId,
-			// sessionContent);
+		}else{
+			System.err.println("serious error !!!!!!!!!!!!");
+			throw new NullPointerException();
 		}
 	}
 
 	@Override
-	public void deleteSession(SessionID sessionId, HttpServletResponse response) {
+	public void deleteSession(SessionID sessionId,List<InetAddress> metadata, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		List<InetAddress> metadata = new ArrayList<InetAddress>(
-				bootstrapViewDAO.getBootstrapView().getIpAddresses());
+		if ( sessionId != null && metadata != null
+				&& response != null) {
 		sessionDAO.removeSession(sessionId, metadata);
-		// this.localSessionTableManager.removeSession(sessionId);
 		removeCookie(response);
+		}else{
+			System.err.println("serious error !!!!!!!!!!!!");
+			throw new NullPointerException();
+		}
 	}
 
 	@Override
