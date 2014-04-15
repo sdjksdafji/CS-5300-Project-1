@@ -150,11 +150,6 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
 			for (int i = 0; i < 3; i++) {
 				scanner.next();
-<<<<<<< HEAD
-				//System.out.println("Testing: "+scanner.next().toString());
-=======
-				// System.out.println("Testing: "+scanner.next().toString());
->>>>>>> bdc9cafd61ea46432eaeb036a042aabefd55c7e8
 			}
 			String primaryIpStr = scanner.next();
 			String secondaryIpStr = scanner.next();

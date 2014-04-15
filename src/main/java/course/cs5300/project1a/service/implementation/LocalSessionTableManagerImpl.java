@@ -67,7 +67,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			SessionContent ownCopyOfSessionContent = sessionMap.get(sessionId);
 			if (ownCopyOfSessionContent == null)
 				return;
-			if (sessionMap.get(sessionId).getVersion() <= sessionContent
+			if (ownCopyOfSessionContent.getVersion() < sessionContent
 					.getVersion())
 				sessionMap.put(sessionId,
 						(SessionContent) sessionContent.clone());
