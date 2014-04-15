@@ -6,7 +6,7 @@ import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
 
 public interface LocalSessionTableManager {
-	public SessionID addSession(SessionContent sessionContent);
+//	public SessionID addSession(SessionContent sessionContent);
 
 	public void updateSession(SessionID sessionId, SessionContent sessionContent);
 

@@ -33,25 +33,26 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Inject
 	private GetLocalIPService getLocalIpService;
 
-	@Override
-	public synchronized SessionID addSession(SessionContent sessionContent) {
-		// TODO Auto-generated method stub
-		long sessionNumber = Math.max(sessionContent.getVersion(),
-				currentSessionId);
-		currentSessionId = sessionNumber + 1;
-		InetAddress addr = null;
-		addr = getLocalIpService.getLocalIP();
-		SessionID newSessionID = null;
-		try {
-			newSessionID = new SessionID(sessionNumber, addr);
-			sessionMap.put(newSessionID,
-					(SessionContent) sessionContent.clone());
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return newSessionID;
-	}
+//	@Override
+//	public synchronized SessionID addSession(SessionContent sessionContent) {
+//		System.out.println("--------------->   add session called     <-------------");
+//		// TODO Auto-generated method stub
+//		long sessionNumber = Math.max(sessionContent.getVersion(),
+//				currentSessionId);
+//		currentSessionId = sessionNumber + 1;
+//		InetAddress addr = null;
+//		addr = getLocalIpService.getLocalIP();
+//		SessionID newSessionID = null;
+//		try {
+//			newSessionID = new SessionID(sessionNumber, addr);
+//			sessionMap.put(newSessionID,
+//					(SessionContent) sessionContent.clone());
+//		} catch (CloneNotSupportedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return newSessionID;
+//	}
 
 	@Override
 	public synchronized void updateSession(SessionID sessionId,
