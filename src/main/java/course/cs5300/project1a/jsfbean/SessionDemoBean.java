@@ -190,11 +190,11 @@ public class SessionDemoBean {
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
 		} else {
+			System.out
+			.println("session found for ID:"+this.sessionId.toString()+"<<------------------------------------------");
 			this.sessionCookieService.updateSession(this.sessionId,
 					this.sessionContent, response, timestampOfThisRequest,
 					versionOfThisRequest, metadata);
-			System.out
-					.println("session found <<------------------------------------------");
 		}
 		if (sessionContent == null) {
 			System.err

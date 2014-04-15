@@ -149,7 +149,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 4; i++) {
 				scanner.next();
 			}
 			String primaryIpStr = scanner.next();
@@ -194,7 +194,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	private void writeSessionInfoToCookie(HttpServletResponse response,
 			SessionID sessionId, long version, long expiration,
 			List<InetAddress> metadata) {
-		String cookieValue = sessionId.getServerID() + "_" + version + "_"
+		String cookieValue = sessionId.getServerID() + "_" +sessionId.getSessionNumber()+ "_" + version + "_"
 				+ expiration;
 		for (InetAddress ip : metadata) {
 			cookieValue = cookieValue + "_" + ip.toString();
