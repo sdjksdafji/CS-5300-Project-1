@@ -55,11 +55,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	public SessionContent createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version) {
 		// TODO Auto-generated method stub
-<<<<<<< HEAD
-		System.out.println(currentTimestamp.getTime());
-=======
 		List<InetAddress> metadata = new ArrayList<InetAddress>();
->>>>>>> origin/bug_fixing
 		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 				+ cookieExpirationTimeInSec * 1000);
 		SessionContent sessionContent = new SessionContent("Hello User",
@@ -162,6 +158,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
 			for (int i = 0; i < 3; i++) {
 				scanner.next();
+				System.out.println("Testing: "+scanner.next().toString());
 			}
 			String primaryIpStr = scanner.next();
 			String secondaryIpStr = scanner.next();

@@ -39,9 +39,10 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		long sessionNumber = Math.max(sessionContent.getVersion(),
 				currentSessionId);
 		currentSessionId = sessionNumber + 1;
+		InetAddress addr = null;
+		addr = getLocalIpService.getLocalIP();
 		SessionID newSessionID = null;
 		try {
-			InetAddress addr = getLocalIpService.getLocalIP();
 			newSessionID = new SessionID(sessionNumber, addr);
 			sessionMap.put(newSessionID,
 					(SessionContent) sessionContent.clone());
@@ -145,28 +146,11 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public List<String> getContentList() {
 		List<String> list = new ArrayList<String>();
-<<<<<<< HEAD
-		   Iterator it = sessionMap.entrySet().iterator();
-		    while (it.hasNext()) {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
-		    }
-=======
 		Iterator it = sessionMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry pairs = (Map.Entry) it.next();
-			if (pairs != null) {
-				System.out.println(pairs.getKey() + "What????????");
-				System.out.println(pairs.getValue() + "What????????");
-			}
-			System.out.println(((SessionID) pairs.getKey()).toString()
-					+ "++++++++++++++++++++++++++++");
-			System.out.println(((SessionContent) pairs.getValue()).toString()
-					+ "-----------------------");
-			list.add(((SessionID) pairs.getKey()).toString() + " = "
-					+ ((SessionContent) pairs.getValue()).toString());
-		}
->>>>>>> origin/bug_fixing
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
+	    }
 		return list;
 	}
 
