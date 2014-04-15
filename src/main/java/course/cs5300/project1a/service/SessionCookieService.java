@@ -15,8 +15,8 @@ public interface SessionCookieService {
 	public SessionContent createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
 
-	public void updateSession(SessionID sessionId, HttpServletResponse response,
-			Timestamp currentTimestamp, long version);
+	public void updateSession(SessionID sessionId,SessionContent sessionContent, HttpServletResponse response,
+			Timestamp currentTimestamp, long version, List<InetAddress> metadata);
 	
 	public void updateSessionMessage(SessionID sessionId, String message);
 

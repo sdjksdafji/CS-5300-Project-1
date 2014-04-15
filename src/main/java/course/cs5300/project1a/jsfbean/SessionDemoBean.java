@@ -189,8 +189,8 @@ public class SessionDemoBean {
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
 		} else {
-			this.sessionCookieService.updateSession(this.sessionId, response,
-					timestampOfThisRequest, versionOfThisRequest);
+			this.sessionCookieService.updateSession(this.sessionId, this.sessionContent, response,
+					timestampOfThisRequest, versionOfThisRequest, metadata);
 			System.out
 					.println("session found <<------------------------------------------");
 		}

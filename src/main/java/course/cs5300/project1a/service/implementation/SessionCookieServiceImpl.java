@@ -77,27 +77,19 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 
 	@Override
 	public void updateSession(SessionID sessionId,
-			HttpServletResponse response, Timestamp currentTimestamp,
-			long version) {
-		// TODO Auto-generated method stub
-		List<InetAddress> metadata = new ArrayList<InetAddress>(
-				bootstrapViewDAO.getBootstrapView().getIpAddresses());
-		SessionContent sessionContent = sessionDAO.getSession(sessionId,
-				metadata);
-		// SessionContent sessionContent = this.localSessionTableManager
-		// .getSession(sessionId);
-		if (sessionContent != null) {
-			System.out.println(currentTimestamp.getTime());
+			SessionContent sessionContent, HttpServletResponse response,
+			Timestamp currentTimestamp, long version,
+			List<InetAddress> metadata) {
+		if(sessionId == null || sessionContent == null || response == null||metadata ==null){
+			System.err.println("serious error !!!!!!!!!!!! check source code");
+		}
 			Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
 					+ cookieExpirationTimeInSec * 1000);
 			sessionContent.setExpirationTimestamp(expirationTS);
 			sessionContent.setVersion(version);
 			sessionDAO.updateSession(sessionId, sessionContent, metadata);
-			// this.localSessionTableManager.updateSession(sessionId,
-			// sessionContent);
 			this.writeSessionInfoToCookie(response, sessionId, version, 0,
 					metadata);
-		}
 	}
 
 	@Override
@@ -158,7 +150,7 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
 			for (int i = 0; i < 3; i++) {
 				scanner.next();
-				//System.out.println("Testing: "+scanner.next().toString());
+				// System.out.println("Testing: "+scanner.next().toString());
 			}
 			String primaryIpStr = scanner.next();
 			String secondaryIpStr = scanner.next();
