@@ -81,7 +81,7 @@ public class SessionDAOImpl implements SessionDAO {
 					localSession.getVersion());
 			if (temp == null)
 				continue;
-			sessionId = localSessionTableManager.addSession(temp);
+			localSessionTableManager.updateSession(sessionId, temp);
 			localSession = temp;
 		}
 		return localSession;
