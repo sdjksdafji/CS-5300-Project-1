@@ -15,17 +15,21 @@ public interface SessionCookieService {
 	public SessionContent createSession(HttpServletResponse response,
 			Timestamp currentTimestamp, long version);
 
-	public void updateSession(SessionID sessionId,SessionContent sessionContent, HttpServletResponse response,
+	public void updateSession(SessionID sessionId,
+			SessionContent sessionContent, HttpServletResponse response,
 			Timestamp currentTimestamp, long version, List<InetAddress> metadata);
-	
-	public void updateSessionMessage(SessionID sessionId, String message);
 
-	public void deleteSession(SessionID sessionId, HttpServletResponse response);
+	public void updateSessionMessage(SessionID sessionId,
+			SessionContent sessionContent, List<InetAddress> metadata,
+			String message);
+
+	public void deleteSession(SessionID sessionId, List<InetAddress> metadata,
+			HttpServletResponse response);
 
 	public SessionID getSessionId(HttpServletRequest request);
-	
+
 	public List<InetAddress> getMetadata(HttpServletRequest request);
 
 	public String getCookieVal(HttpServletRequest request);
-	
+
 }

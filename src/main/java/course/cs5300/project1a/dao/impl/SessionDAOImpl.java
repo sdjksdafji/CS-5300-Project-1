@@ -93,6 +93,7 @@ public class SessionDAOImpl implements SessionDAO {
 		for (InetAddress m : metadata) {
 			SessionContent sessionContent = new SessionContent();
 			sessionContent.setVersion(-1);
+			sessionContent.setMessage("");
 			rPCClientService.writeSession(m, sessionId, sessionContent);
 		}
 	}
