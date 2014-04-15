@@ -109,6 +109,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public synchronized void removeSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
+		System.out.println(sessionId.getSessionNumber()+" is deleted!");
 		sessionMap.remove(sessionId);
 
 	}

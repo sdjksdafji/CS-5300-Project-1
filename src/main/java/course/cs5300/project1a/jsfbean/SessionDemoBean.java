@@ -151,6 +151,9 @@ public class SessionDemoBean {
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
 		this.sessionCookieService.deleteSession(this.sessionId,this.metadata, this.response);
+		this.sessionContent = null;
+		this.sessionMessage = "";
+		this.sessionExpireTime = "";
 		return "/views/SessionDemo.xhtml";
 	}
 

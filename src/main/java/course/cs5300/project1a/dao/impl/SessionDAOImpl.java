@@ -87,6 +87,7 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public void removeSession(SessionID sessionId, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
+		localSessionTableManager.removeSession(sessionId);
 		for (InetAddress m : metadata) {
 			SessionContent sessionContent = new SessionContent();
 			sessionContent.setVersion(-1);
