@@ -21,5 +21,4 @@ public interface GossipService {
 	
 	public void runUpdateBootstrapView();
 	
-	public void gossipConnect();
 }
