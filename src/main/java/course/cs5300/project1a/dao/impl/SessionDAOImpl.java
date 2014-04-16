@@ -64,6 +64,7 @@ public class SessionDAOImpl implements SessionDAO {
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata) {
 		// TODO Auto-generated method stub
+		localSessionTableManager.updateSession(sessionId, sessionContent);
 		for (InetAddress m : metadata) {
 			rPCClientService.writeSession(m, sessionId, sessionContent);
 		}

@@ -76,8 +76,10 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 			System.err.println("serious error !!!!!!!!!!!!");
 			throw new NullPointerException();
 		}
-		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
-				+ cookieExpirationTimeInSec * 1000);
+//		Timestamp expirationTS = new Timestamp(currentTimestamp.getTime()
+//				+ cookieExpirationTimeInSec * 1000);
+		Timestamp expirationTS = new Timestamp((new Date()).getTime() + cookieExpirationTimeInSec * 1000);
+		System.out.println("Time2: "+expirationTS.toString());
 		sessionContent.setExpirationTimestamp(expirationTS);
 		sessionContent.setVersion(version);
 		sessionDAO.updateSession(sessionId, sessionContent, metadata);

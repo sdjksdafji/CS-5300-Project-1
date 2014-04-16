@@ -58,6 +58,7 @@ public class SessionContent {
 
 	public void setExpirationTimestamp(Timestamp expirationTimestamp) {
 		this.expirationTimestamp = expirationTimestamp;
+		System.out.println("this.Time2: "+this.expirationTimestamp.toString());
 	}
 
 	@Override

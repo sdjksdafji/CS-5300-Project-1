@@ -94,13 +94,16 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			c = new SessionContent();
 			c.setMessage("Hello User");
 			c.setVersion(0);
-			Timestamp currentTs = new Timestamp((new Date()).getTime());
-			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()
-					+ cookieExpirationTimeInSec * 1000);
+//			Timestamp currentTs = new Timestamp((new Date()).getTime());
+//			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()
+//					+ cookieExpirationTimeInSec * 1000);
+			Timestamp expirationTimestamp = new Timestamp((new Date()).getTime()+cookieExpirationTimeInSec * 1000);
 			c.setExpirationTimestamp(expirationTimestamp);
-			sessionMap.put(sessionId, c);
 			System.out.println(sessionId + " is added, Message:"
 					+ c.getMessage());
+			System.out.println("Time: "+expirationTimestamp.toString());
+			sessionMap.put(sessionId, c);
+//			System.out.println("Time: "+expirationTimestamp.toString());
 		}
 		return c;
 	}
@@ -153,6 +156,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		Iterator it = sessionMap.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
+	        System.out.println("Time3: "+pairs.getValue().toString());
 	        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
 	    }
 		return list;
