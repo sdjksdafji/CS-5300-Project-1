@@ -89,7 +89,7 @@ public class GossipServiceImpl implements GossipService {
 			 this.updateBootstrapView();
 			 Random generator = new Random();
 			 try {
-				Thread.sleep( (GOSSIP_SECS/2) + generator.nextInt( GOSSIP_SECS ) );
+				Thread.sleep( (GOSSIP_SECS/2*1000) + generator.nextInt( GOSSIP_SECS*1000 ) );
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

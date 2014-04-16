@@ -15,6 +15,7 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 
 	@Override
 	public InetAddress getLocalIP() {
+		/*
 		try {
 			return InetAddress.getByName(InetAddress.getLocalHost()
 					.getHostAddress());
@@ -22,17 +23,23 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		/*
-		 * String command = "/opt/aws/bin/ec2-metadata --public-ipv4"; try {
-		 * Process a = Runtime.getRuntime().exec(command); InputStreamReader
-		 * read = new InputStreamReader(a.getInputStream()); BufferedReader
-		 * bufferedReader = new BufferedReader(read); String lineText = null;
-		 * if((lineText=bufferedReader.readLine())!=null){ String[] strings =
-		 * lineText.split("\\s"); //System.out.println(strings[0]);
-		 * //System.out.println(strings[1]); return
-		 * InetAddress.getByName(strings[1]); } } catch (IOException e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); }
-		 */
+		*/
+		String command = "/opt/aws/bin/ec2-metadata --public-ipv4";
+		try {
+			Process a = Runtime.getRuntime().exec(command);
+			InputStreamReader read = new InputStreamReader(a.getInputStream());
+			BufferedReader bufferedReader = new BufferedReader(read);
+			String lineText = null;
+			if((lineText=bufferedReader.readLine())!=null){
+				String[] strings = lineText.split("\\s");
+				//System.out.println(strings[0]);
+				//System.out.println(strings[1]);
+				return InetAddress.getByName(strings[1]);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
