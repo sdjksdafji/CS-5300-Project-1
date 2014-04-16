@@ -21,16 +21,6 @@ import course.cs5300.project1a.service.GetLocalIPService;
 public class GossipServiceImpl implements GossipService {
 
 	private static View view = new View();
-	private static final int VIEW_SIZE = 5;
-	private static final int GOSSIP_SECS = 60;
-
-
-	@Inject
-	private BootstrapViewDAO bootstrapViewDAO;
-
-	@Inject
-	private GetLocalIPService getLocalIPService;
-
 
 	@Override
 	public synchronized void shrink(int k) {
@@ -68,34 +58,7 @@ public class GossipServiceImpl implements GossipService {
 		return view.clone();
 	}
 
-	@Override
-	public void updateBootstrapView() {
-		// TODO Auto-generated method stub
-		View bootstrapView = this.bootstrapViewDAO.getBootstrapView();
-		View copy = this.getView();
-		bootstrapView.union(copy);
-		bootstrapView.insert(this.getLocalIPService.getLocalIP());
-		bootstrapView.shrink(VIEW_SIZE);
-		this.bootstrapViewDAO.setBootstrapView(bootstrapView);
-		this.union(bootstrapView);
-	}
 
-	@Scheduled(initialDelay = 10000, fixedRate = java.lang.Long.MAX_VALUE)
-	@Async
-	public void runUpdateBootstrapView() {
-		System.out.println("Updating bootstrap view");
-		while (true) {
-			this.updateBootstrapView();
-			Random generator = new Random();
-			try {
-				Thread.sleep((GOSSIP_SECS / 2 * 1000)
-						+ generator.nextInt(GOSSIP_SECS * 1000));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 
 
 

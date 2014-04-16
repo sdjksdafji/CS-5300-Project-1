@@ -17,8 +17,4 @@ public interface GossipService {
 	
 	public View getView();
 	
-	public void updateBootstrapView();
-	
-	public void runUpdateBootstrapView();
-	
 }
