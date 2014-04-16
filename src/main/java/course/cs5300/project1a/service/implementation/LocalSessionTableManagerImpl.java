@@ -65,7 +65,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		// TODO Auto-generated method stub
 		if (sessionId == null || sessionContent == null)
 			return;
-		if (sessionContent.getVersion() == -1) {
+		if (sessionContent.getVersion() < 0) {
 			removeSession(sessionId);
 			return;
 		}
