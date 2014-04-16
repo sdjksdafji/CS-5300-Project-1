@@ -100,22 +100,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		// sc.setVersion(0);
 		// sessionMap.put(sessionId, sc);
 		SessionContent c = sessionMap.get(sessionId);
-<<<<<<< HEAD
-		if (c == null) {
-			c = new SessionContent();
-			c.setMessage("Hello User");
-			c.setVersion(0);
-//			Timestamp currentTs = new Timestamp((new Date()).getTime());
-//			Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()
-//					+ cookieExpirationTimeInSec * 1000);
-			Timestamp expirationTimestamp = new Timestamp((new Date()).getTime()+cookieExpirationTimeInSec * 1000);
-			c.setExpirationTimestamp(expirationTimestamp);
-			System.out.println(sessionId + " is added, Message:"
-					+ c.getMessage());
-			System.out.println("Time: "+expirationTimestamp.toString());
-			sessionMap.put(sessionId, c);
-//			System.out.println("Time: "+expirationTimestamp.toString());
-=======
+
 		// if (c == null) {
 		// c = new SessionContent();
 		// c.setMessage("Hello User");
@@ -133,7 +118,6 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 					.println("===========================> get session locally for timestap:"
 							+ (c.getExpirationTimestamp() == null ? "null" : c
 									.getExpirationTimestamp().toString()));
->>>>>>> ee54a3d574652aaff2448c8e338b6343a49edb63
 		}
 		return c;
 	}
@@ -184,19 +168,11 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	public synchronized List<String> getContentList() {
 		List<String> list = new ArrayList<String>();
 		Iterator it = sessionMap.entrySet().iterator();
-<<<<<<< HEAD
-	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
-	        System.out.println("Time3: "+pairs.getValue().toString());
-	        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
-	    }
-=======
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
 			list.add(((SessionID) pairs.getKey()).toString() + " = "
 					+ ((SessionContent) pairs.getValue()).toString());
 		}
->>>>>>> ee54a3d574652aaff2448c8e338b6343a49edb63
 		return list;
 	}
 
