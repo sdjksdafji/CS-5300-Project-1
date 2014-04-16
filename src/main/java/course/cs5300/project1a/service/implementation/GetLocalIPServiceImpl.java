@@ -16,13 +16,13 @@ public class GetLocalIPServiceImpl implements GetLocalIPService {
 	@Override
 	public InetAddress getLocalIP() {
 
-		try {
-			return InetAddress.getByName(InetAddress.getLocalHost()
-					.getHostAddress());
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		try {
+//			return InetAddress.getByName(InetAddress.getLocalHost()
+//					.getHostAddress());
+//		} catch (UnknownHostException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 
 		 // String command = "/opt/aws/bin/ec2-metadata --public-ipv4";
 		 String command = "ec2metadata --public-ipv4";
