@@ -189,7 +189,12 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 		String cookieValue = sessionId.getServerID() + "_" +sessionId.getSessionNumber()+ "_" + version + "_"
 				+ expiration;
 		for (InetAddress ip : metadata) {
-			cookieValue = cookieValue + "_" + ip.toString();
+			if(ip != null){
+				cookieValue = cookieValue + "_" + ip.toString();
+			}
+			
+			
+			
 		}
 		Cookie cookie = new Cookie(COOKIE_NAME, cookieValue);
 		cookie.setMaxAge((int) cookieExpirationTimeInSec);
