@@ -28,7 +28,6 @@ import course.cs5300.project1a.service.*;
 @Scope("singleton")
 public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	private static Map<SessionID, SessionContent> sessionMap = new HashMap<SessionID, SessionContent>();
-	private static long currentSessionId = 0;
 	private final long cookieExpirationTimeInSec = 30;
 	@Inject
 	private GetLocalIPService getLocalIpService;

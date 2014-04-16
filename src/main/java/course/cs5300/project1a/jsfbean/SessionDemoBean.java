@@ -40,16 +40,7 @@ public class SessionDemoBean {
 	private Timestamp timestampOfThisRequest;
 
 	@Inject
-	private BootstrapViewDAO bootstrapViewDAO;
-
-	@Inject
-	private GetLocalIPService getLocalIPService;
-
-	@Inject
 	private SessionCookieService sessionCookieService;
-
-	@Inject
-	private LocalSessionTableManager localSessionTableManager;
 
 	@Inject
 	private SessionDAO sessionDAO;
@@ -128,7 +119,8 @@ public class SessionDemoBean {
 
 	public String replace() {
 		if (this.userInput != null) {
-			this.sessionContent.setVersion(this.versionManager.getVersionNumber());
+			this.sessionContent.setVersion(this.versionManager
+					.getVersionNumber());
 			this.sessionCookieService.updateSessionMessage(this.sessionId,
 					this.sessionContent, this.metadata, this.userInput);
 			this.sessionMessage = this.userInput;
@@ -150,7 +142,8 @@ public class SessionDemoBean {
 		System.out
 				.println("logout clicked<<--------------------------------------------");
 		// ----------------------------------------------
-		this.sessionCookieService.deleteSession(this.sessionId,this.metadata, this.response);
+		this.sessionCookieService.deleteSession(this.sessionId, this.metadata,
+				this.response);
 		this.sessionContent = null;
 		this.sessionMessage = "";
 		this.sessionExpireTime = "";
@@ -175,7 +168,8 @@ public class SessionDemoBean {
 
 	private void readSession() {
 		this.sessionId = this.sessionCookieService.getSessionId(request);
-//		if(sessionId!=null) System.out.println("Check before: "+this.versionOfThisRequest);
+		// if(sessionId!=null)
+		// System.out.println("Check before: "+this.versionOfThisRequest);
 		this.metadata = this.sessionCookieService.getMetadata(request);
 		this.sessionContent = sessionDAO.getSession(this.sessionId, metadata);
 		if (sessionContent == null) {
@@ -185,8 +179,9 @@ public class SessionDemoBean {
 					.createSession(this.response, timestampOfThisRequest,
 							versionOfThisRequest);
 		} else {
-			System.out
-			.println("session found for ID:"+this.sessionId.toString()+"<<------------------------------------------");
+			System.out.println("session found for ID:"
+					+ this.sessionId.toString()
+					+ "<<------------------------------------------");
 			this.sessionCookieService.updateSession(this.sessionId,
 					this.sessionContent, response, timestampOfThisRequest,
 					versionOfThisRequest, metadata);
@@ -197,7 +192,8 @@ public class SessionDemoBean {
 			sessionContent = new SessionContent();
 			// throw new NullPointerException();
 		}
-//		if(sessionId!=null) System.out.println("Check after: "+this.versionOfThisRequest);
+		// if(sessionId!=null)
+		// System.out.println("Check after: "+this.versionOfThisRequest);
 
 	}
 
