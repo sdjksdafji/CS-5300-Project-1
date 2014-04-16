@@ -24,13 +24,13 @@ public class GossipServiceImpl implements GossipService {
 	private static final int VIEW_SIZE = 5;
 	private static final int GOSSIP_SECS = 60;
 	private static final int CONNECT_INTERVAL = 45;
-	
+
 	@Inject
 	private BootstrapViewDAO bootstrapViewDAO;
-	
+
 	@Inject
 	private GetLocalIPService getLocalIPService;
-	
+
 	@Inject
 	private RPCClientService rpcClientService;
 
@@ -79,24 +79,26 @@ public class GossipServiceImpl implements GossipService {
 		bootstrapView.insert(this.getLocalIPService.getLocalIP());
 		bootstrapView.shrink(VIEW_SIZE);
 		this.bootstrapViewDAO.setBootstrapView(bootstrapView);
+		this.union(bootstrapView);
 	}
-	
+
 	@Scheduled(initialDelay = 10000, fixedRate = java.lang.Long.MAX_VALUE)
 	@Async
-	public void runUpdateBootstrapView(){
+	public void runUpdateBootstrapView() {
 		System.out.println("Updating bootstrap view");
-		 while(true) {
-			 this.updateBootstrapView();
-			 Random generator = new Random();
-			 try {
-				Thread.sleep( (GOSSIP_SECS/2*1000) + generator.nextInt( GOSSIP_SECS*1000 ) );
+		while (true) {
+			this.updateBootstrapView();
+			Random generator = new Random();
+			try {
+				Thread.sleep((GOSSIP_SECS / 2 * 1000)
+						+ generator.nextInt(GOSSIP_SECS * 1000));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		 }
+		}
 	}
-	
+
 	@Scheduled(initialDelay = 5000, fixedRate = CONNECT_INTERVAL * 1000)
 	@Async
 	public void gossipConnect() {
@@ -110,6 +112,5 @@ public class GossipServiceImpl implements GossipService {
 			this.union(peerView);
 		}
 	}
-
 
 }
