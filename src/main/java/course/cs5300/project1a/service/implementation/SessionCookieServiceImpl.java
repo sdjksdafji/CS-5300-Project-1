@@ -115,7 +115,8 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	public SessionID getSessionId(HttpServletRequest request) {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
-			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
+			Scanner scanner = new Scanner(cookieVal);
+			scanner.useDelimiter("_");
 			System.out.println(cookieVal);
 			String serverIpStr = scanner.next();
 			long sessionNum = Long.valueOf((scanner.next()));
@@ -140,7 +141,8 @@ public class SessionCookieServiceImpl implements SessionCookieService {
 	public List<InetAddress> getMetadata(HttpServletRequest request) {
 		String cookieVal = this.getCookieVal(request);
 		if (cookieVal != null) {
-			Scanner scanner = new Scanner(cookieVal).useDelimiter("_");
+			Scanner scanner = new Scanner(cookieVal);
+			scanner.useDelimiter("_");
 			for (int i = 0; i < 4; i++) {
 				scanner.next();
 			}

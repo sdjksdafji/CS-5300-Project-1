@@ -18,7 +18,7 @@ public class RPCServerListener {
 
 	public static final int RPC_PORT = 5301;
 	public static final int BUFFER_SIZE = 1024;
-	public static final int SOCKET_TIMEOUT = 10 * 1000;
+	public static final int SOCKET_TIMEOUT = 5 * 1000;
 
 	@Inject
 	private ApplicationContext applicationContext;

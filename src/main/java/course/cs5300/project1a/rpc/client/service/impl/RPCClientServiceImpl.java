@@ -53,6 +53,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 				serverId, RPCServerListener.RPC_PORT);
 		try {
 			udpSocket.send(sendPkt);
+			System.out.println("read session rpc packet sent !!!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			udpSocket.close();
@@ -117,12 +118,21 @@ public class RPCClientServiceImpl implements RPCClientService {
 				serverId, RPCServerListener.RPC_PORT);
 		try {
 			udpSocket.send(sendPkt);
+			System.out.println("write session rpc packet sent !!!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			udpSocket.close();
 			return false;
 		}
 
+		try {
+			udpSocket.setSoTimeout(RPCServerListener.SOCKET_TIMEOUT);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			udpSocket.close();
+			return null;
+		}
 		byte[] inBuf = new byte[RPCServerListener.BUFFER_SIZE];
 		DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
 		try {
@@ -162,12 +172,20 @@ public class RPCClientServiceImpl implements RPCClientService {
 				serverId, RPCServerListener.RPC_PORT);
 		try {
 			udpSocket.send(sendPkt);
+			System.out.println("read session rpc packet sent !!!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			udpSocket.close();
 			return null;
 		}
-
+		try {
+			udpSocket.setSoTimeout(RPCServerListener.SOCKET_TIMEOUT);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			udpSocket.close();
+			return null;
+		}
 		byte[] inBuf = new byte[RPCServerListener.BUFFER_SIZE];
 		DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
 		try {

@@ -22,6 +22,7 @@ import course.cs5300.project1a.pojo.SessionID;
 import course.cs5300.project1a.rpc.client.service.RPCClientService;
 import course.cs5300.project1a.service.implementation.LocalSessionTableManagerImpl;
 
+@SuppressWarnings("unused")
 @Named
 @Scope("singleton")
 public class SessionDAOImpl implements SessionDAO {
