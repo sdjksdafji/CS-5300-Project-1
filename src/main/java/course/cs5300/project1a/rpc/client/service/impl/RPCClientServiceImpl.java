@@ -131,7 +131,7 @@ public class RPCClientServiceImpl implements RPCClientService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			udpSocket.close();
-			return null;
+			return false;
 		}
 		byte[] inBuf = new byte[RPCServerListener.BUFFER_SIZE];
 		DatagramPacket recvPkt = new DatagramPacket(inBuf, inBuf.length);
