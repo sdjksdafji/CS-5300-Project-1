@@ -79,6 +79,12 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 
 		outBuf[4] = RPCOperationCode.SESSION_READ;
 
+		if(sessionContent ==null){
+			sessionContent = new SessionContent();
+			sessionContent.setMessage("");
+			sessionContent.setVersion(-1);
+			sessionContent.setExpirationTimestamp(new Timestamp(1));
+		}
 		long ver = sessionContent.getVersion();
 		byte[] verArray = long2byte(ver);
 		byte2byte(5, outBuf, verArray);
@@ -120,7 +126,10 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 		byte[] mess = getByteArray(inBuf, 21, bufferLength - 21);
 		String message = byte2string(mess);
 
-		SessionContent content = new SessionContent(message, version, timestamp);
+		SessionContent content = null;
+		if(version >= 0){
+			content = new SessionContent(message, version, timestamp);
+		}
 		return content;
 	}
 

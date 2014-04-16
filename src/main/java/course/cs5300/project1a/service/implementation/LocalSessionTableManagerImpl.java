@@ -20,8 +20,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import course.cs5300.project1a.pojo.SessionContent;
 import course.cs5300.project1a.pojo.SessionID;
-import course.cs5300.project1a.service.GetLocalIPService;
-import course.cs5300.project1a.service.LocalSessionTableManager;
 import course.cs5300.project1a.service.*;
 
 @Named
@@ -32,30 +30,38 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Inject
 	private GetLocalIPService getLocalIpService;
 
-//	@Override
-//	public synchronized SessionID addSession(SessionContent sessionContent) {
-//		System.out.println("--------------->   add session called     <-------------");
-//		// TODO Auto-generated method stub
-//		long sessionNumber = Math.max(sessionContent.getVersion(),
-//				currentSessionId);
-//		currentSessionId = sessionNumber + 1;
-//		InetAddress addr = null;
-//		addr = getLocalIpService.getLocalIP();
-//		SessionID newSessionID = null;
-//		try {
-//			newSessionID = new SessionID(sessionNumber, addr);
-//			sessionMap.put(newSessionID,
-//					(SessionContent) sessionContent.clone());
-//		} catch (CloneNotSupportedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return newSessionID;
-//	}
+	// @Override
+	// public synchronized SessionID addSession(SessionContent sessionContent) {
+	// System.out.println("--------------->   add session called     <-------------");
+	// // TODO Auto-generated method stub
+	// long sessionNumber = Math.max(sessionContent.getVersion(),
+	// currentSessionId);
+	// currentSessionId = sessionNumber + 1;
+	// InetAddress addr = null;
+	// addr = getLocalIpService.getLocalIP();
+	// SessionID newSessionID = null;
+	// try {
+	// newSessionID = new SessionID(sessionNumber, addr);
+	// sessionMap.put(newSessionID,
+	// (SessionContent) sessionContent.clone());
+	// } catch (CloneNotSupportedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// return newSessionID;
+	// }
 
 	@Override
 	public synchronized void updateSession(SessionID sessionId,
 			SessionContent sessionContent) {
+		System.err
+				.println("===========================> update session locally for timestap:"
+						+ (sessionContent.getExpirationTimestamp() == null ? "null"
+								: sessionContent.getExpirationTimestamp()
+										.toString()));
+		System.err.println(sessionId.toString() + ":\n");
+		System.err.println(sessionContent.toString());
+		System.err.println(sessionContent.getVersion());
 		// TODO Auto-generated method stub
 		if (sessionId == null || sessionContent == null)
 			return;
@@ -65,14 +71,18 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		}
 		try {
 			SessionContent ownCopyOfSessionContent = sessionMap.get(sessionId);
-			if (ownCopyOfSessionContent == null)
-				return;
-			if (ownCopyOfSessionContent.getVersion() < sessionContent
-					.getVersion()){System.out.println("-----------------------> store content:"+sessionContent.toString()+"<-----------------------");
+			if (ownCopyOfSessionContent == null
+					|| (ownCopyOfSessionContent != null && ownCopyOfSessionContent
+							.getVersion() < sessionContent.getVersion())) {
+				System.out.println("-----------------------> store content:"
+						+ sessionContent.toString()
+						+ "<-----------------------");
 				sessionMap.put(sessionId,
 						(SessionContent) sessionContent.clone());
-			}else{
-				System.out.println("session content ignored due to older version");
+			} else {
+				System.out
+						.println("session content ignored due to older version"
+								+ ownCopyOfSessionContent.getVersion());
 			}
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
@@ -90,6 +100,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 		// sc.setVersion(0);
 		// sessionMap.put(sessionId, sc);
 		SessionContent c = sessionMap.get(sessionId);
+<<<<<<< HEAD
 		if (c == null) {
 			c = new SessionContent();
 			c.setMessage("Hello User");
@@ -104,6 +115,25 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 			System.out.println("Time: "+expirationTimestamp.toString());
 			sessionMap.put(sessionId, c);
 //			System.out.println("Time: "+expirationTimestamp.toString());
+=======
+		// if (c == null) {
+		// c = new SessionContent();
+		// c.setMessage("Hello User");
+		// c.setVersion(0);
+		// Timestamp currentTs = new Timestamp((new Date()).getTime());
+		// Timestamp expirationTimestamp = new Timestamp(currentTs.getTime()
+		// + cookieExpirationTimeInSec * 1000);
+		// c.setExpirationTimestamp(expirationTimestamp);
+		// sessionMap.put(sessionId, c);
+		// System.out.println(sessionId + " is added, Message:"
+		// + c.getMessage());
+		// }
+		if (c != null) {
+			System.err
+					.println("===========================> get session locally for timestap:"
+							+ (c.getExpirationTimestamp() == null ? "null" : c
+									.getExpirationTimestamp().toString()));
+>>>>>>> ee54a3d574652aaff2448c8e338b6343a49edb63
 		}
 		return c;
 	}
@@ -111,7 +141,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	@Override
 	public synchronized void removeSession(SessionID sessionId) {
 		// TODO Auto-generated method stub
-		System.out.println(sessionId.getSessionNumber()+" is deleted!");
+		System.out.println(sessionId.getSessionNumber() + " is deleted!");
 		sessionMap.remove(sessionId);
 
 	}
@@ -151,14 +181,22 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	public List<String> getContentList() {
+	public synchronized List<String> getContentList() {
 		List<String> list = new ArrayList<String>();
 		Iterator it = sessionMap.entrySet().iterator();
+<<<<<<< HEAD
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        System.out.println("Time3: "+pairs.getValue().toString());
 	        list.add(((SessionID)pairs.getKey()).toString() + " = " + ((SessionContent)pairs.getValue()).toString());
 	    }
+=======
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry) it.next();
+			list.add(((SessionID) pairs.getKey()).toString() + " = "
+					+ ((SessionContent) pairs.getValue()).toString());
+		}
+>>>>>>> ee54a3d574652aaff2448c8e338b6343a49edb63
 		return list;
 	}
 

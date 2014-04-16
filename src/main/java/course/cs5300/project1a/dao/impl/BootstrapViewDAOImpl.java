@@ -79,10 +79,10 @@ public class BootstrapViewDAOImpl implements BootstrapViewDAO {
 	
 	@Override
 	public void setBootstrapView(View view) {
-		System.out.println("We are setting views");
-		for(InetAddress ip : view.getIpAddresses()){
-			System.out.println("We are setting "+ip.toString());
-		}
+//		System.out.println("We are setting views");
+//		for(InetAddress ip : view.getIpAddresses()){
+//			System.out.println("We are setting "+ip.toString());
+//		}
 		
 		// TODO Auto-generated method stub
 		String TableName = "Table";

@@ -39,6 +39,9 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public SessionID addSession(SessionContent sessionContent,
 			List<InetAddress> metadata) {
+		System.err.println("====================> add session for timestap:"
+				+ (sessionContent.getExpirationTimestamp() == null ? "null"
+						: sessionContent.getExpirationTimestamp().toString()));
 		// TODO Auto-generated method stub
 		SessionID sessionId = new SessionID(
 				this.sessionNumberManager.getSessionNum(),
@@ -63,6 +66,11 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata) {
+		System.err
+				.println("===========================> update session for timestap:"
+						+ (sessionContent.getExpirationTimestamp() == null ? "null"
+								: sessionContent.getExpirationTimestamp()
+										.toString()));
 		// TODO Auto-generated method stub
 		localSessionTableManager.updateSession(sessionId, sessionContent);
 		for (InetAddress m : metadata) {
@@ -80,8 +88,13 @@ public class SessionDAOImpl implements SessionDAO {
 				.getSession(sessionId);
 		SessionContent returnedSessionContent = null;
 		for (InetAddress m : metadata) {
-			returnedSessionContent = rPCClientService.readSession(m, sessionId,
-					localSession.getVersion());
+			if (localSession != null) {
+				returnedSessionContent = rPCClientService.readSession(m,
+						sessionId, localSession.getVersion());
+			} else {
+				returnedSessionContent = rPCClientService.readSession(m,
+						sessionId, -1);
+			}
 		}
 		return returnedSessionContent;
 	}
