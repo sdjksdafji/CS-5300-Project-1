@@ -365,8 +365,9 @@ public class RPCBufferServiceImpl implements RPCBufferService {
 	public long byte2long(byte[] input) {
 		long res = 0;
 		for (int i = 0; i < 8; i++) {
-			int shift = (8 - 1 - i) * 8;
-			res += (input[i] & 0x000000FF) << shift;
+			long shift = (8 - 1 - (long)i) * 8;
+			long temp = input[i] & 0x000000FF;
+			res += (temp) << shift;
 		}
 
 		return res;

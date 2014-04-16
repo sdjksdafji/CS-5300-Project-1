@@ -131,6 +131,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
+	@Scheduled(initialDelay=5000, fixedRate=5000)
 	public synchronized void removeExpiredSession() {
 		// TODO Auto-generated method stub
 		System.out
