@@ -39,9 +39,6 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public SessionID addSession(SessionContent sessionContent,
 			List<InetAddress> metadata) {
-		System.err.println("====================> add session for timestap:"
-				+ (sessionContent.getExpirationTimestamp() == null ? "null"
-						: sessionContent.getExpirationTimestamp().toString()));
 		// TODO Auto-generated method stub
 		SessionID sessionId = new SessionID(
 				this.sessionNumberManager.getSessionNum(),
@@ -66,11 +63,6 @@ public class SessionDAOImpl implements SessionDAO {
 	@Override
 	public void updateSession(SessionID sessionId,
 			SessionContent sessionContent, List<InetAddress> metadata) {
-		System.err
-				.println("===========================> update session for timestap:"
-						+ (sessionContent.getExpirationTimestamp() == null ? "null"
-								: sessionContent.getExpirationTimestamp()
-										.toString()));
 		// TODO Auto-generated method stub
 		localSessionTableManager.updateSession(sessionId, sessionContent);
 		for (InetAddress m : metadata) {

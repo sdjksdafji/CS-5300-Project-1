@@ -48,8 +48,8 @@ public class GossipRandomConnect {
 	@Scheduled(initialDelay = 10000, fixedRate = java.lang.Long.MAX_VALUE)
 	@Async
 	public void runUpdateBootstrapView() {
-		System.out.println("Updating bootstrap view");
 		while (true) {
+			System.out.println("Updating bootstrap view");
 			this.updateBootstrapView();
 			Random generator = new Random();
 			try {

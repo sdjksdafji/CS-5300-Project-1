@@ -59,9 +59,6 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 						+ (sessionContent.getExpirationTimestamp() == null ? "null"
 								: sessionContent.getExpirationTimestamp()
 										.toString()));
-		System.err.println(sessionId.toString() + ":\n");
-		System.err.println(sessionContent.toString());
-		System.err.println(sessionContent.getVersion());
 		// TODO Auto-generated method stub
 		if (sessionId == null || sessionContent == null)
 			return;
@@ -131,7 +128,7 @@ public class LocalSessionTableManagerImpl implements LocalSessionTableManager {
 	}
 
 	@Override
-	@Scheduled(initialDelay=5000, fixedRate=5000)
+	@Scheduled(initialDelay=60000, fixedRate=60000)
 	public synchronized void removeExpiredSession() {
 		// TODO Auto-generated method stub
 		System.out
