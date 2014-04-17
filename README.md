@@ -37,3 +37,5 @@ RPC format: All rpc request and response are formatted in a single UDP packet. T
 Beanstalk Configuration:
 In AWS EC2, we set the rules in the instance's security group, and open the ports we may use in the project. In AWS Elastic Beanstalk, we set the server to tomcat and upload our war file. 
 
+
+Special notes for TA to deploy: you need to change the bootstrap content in the simpleDB to one of the public IP of your ec2 instance (any valid server IP is ok) format: "/"+ip address
