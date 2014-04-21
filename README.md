@@ -1,4 +1,4 @@
-CS 5300 Project 1a
+CS 5300 Project 1
 
 This project is a java servlet for session management. The following framework are used in the project:
 
